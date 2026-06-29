@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GEO计费系统 V1.1</title>
+  <!-- Google Fonts: Inter + Noto Sans SC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- CSS设计系统 -->
+  <link rel="stylesheet" href="css/styles.css?v=lucide-20260608" />
+</head>
+<body>
+  <!-- App Shell 布局 -->
+  <div class="app-shell">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <!-- 由 app.js renderSidebar() 动态渲染 -->
+    </aside>
+
+    <!-- 主区域 -->
+    <div class="main-area">
+      <!-- 顶栏 -->
+      <header class="header" id="header">
+        <!-- 由 app.js renderHeader() 动态渲染 -->
+      </header>
+
+      <!-- 内容区 -->
+      <main class="content-area" id="content">
+        <!-- 由 app.js renderContent() 动态渲染 -->
+      </main>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <script src="js/data.js?v=charts-20260612"></script>
+  <script src="js/render.js?v=charts-20260612"></script>
+  <script src="js/app.js?v=charts-20260612"></script>
+</body>
+</html>
