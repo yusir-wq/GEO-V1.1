@@ -12,12 +12,13 @@
         }
 
         html {
-            background: #0d47a1;
+            background: linear-gradient(180deg, #f0f4ff 0%, #f5f0ff 100%);
+            min-height: 100vh;
         }
 
         body {
             min-height: 100vh;
-            background: #0d47a1;
+            background: linear-gradient(180deg, #f0f4ff 0%, #f5f0ff 100%);
             color: #1f2937;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
             font-size: 14px;
@@ -443,10 +444,167 @@
 
         .footer-note {
             margin-top: 18px;
-            color: #fff;
+            color: #6b7280;
             text-align: center;
             font-size: 13px;
             font-weight: 600;
+        }
+
+        /* ---- 模块标题 ---- */
+        .module-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 32px 0 18px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        .module-title::before {
+            content: "";
+            flex: 0 0 4px;
+            height: 18px;
+            background: #6366f1;
+            border-radius: 2px;
+        }
+
+        /* ---- 品牌画像 ---- */
+        .brand-card {
+            display: flex;
+            gap: 28px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .brand-card:hover { transform: translateY(-2px); }
+        .brand-img {
+            flex: 0 0 300px;
+            height: 200px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+            display: grid;
+            place-items: center;
+            font-size: 14px;
+            color: #6366f1;
+        }
+        .brand-info { flex: 1; }
+        .brand-info p {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.7;
+        }
+        .brand-info strong { color: #1f2937; }
+
+        /* ---- AI搜索概况 ---- */
+        .overview-subtitle {
+            color: #6366f1;
+            font-size: 14px;
+            font-style: italic;
+            margin-bottom: 18px;
+        }
+        .overview-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+        .donut-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .donut-ring {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: conic-gradient(#6366f1 0deg 195deg, #8b5cf6 195deg 285deg, #06b6d4 285deg 308deg, #e5e7eb 308deg 360deg);
+            position: relative;
+        }
+        .donut-ring::after {
+            content: "";
+            position: absolute;
+            inset: 30px;
+            border-radius: 50%;
+            background: #fff;
+        }
+        .donut-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            font-size: 28px;
+            font-weight: 800;
+            color: #6366f1;
+        }
+        .donut-center span { font-size: 12px; color: #9ca3af; font-weight: 500; }
+        .overview-metrics {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .metric-mini {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            text-align: center;
+        }
+        .metric-mini .m-num { font-size: 32px; font-weight: 800; color: #6366f1; }
+        .metric-mini .m-label { font-size: 13px; color: #6b7280; margin-top: 4px; }
+        .metric-mini.purple .m-num { color: #8b5cf6; }
+
+        /* 排名条形图 */
+        .rank-bars { display: flex; flex-direction: column; gap: 12px; }
+        .rank-item { display: flex; align-items: center; gap: 10px; }
+        .rank-badge {
+            flex: 0 0 28px; height: 28px; border-radius: 50%;
+            display: grid; place-items: center;
+            font-size: 13px; font-weight: 800; color: #fff;
+        }
+        .rank-badge.gold { background: linear-gradient(135deg,#f59e0b,#f97316); font-size: 16px; }
+        .rank-badge.silver { background: #94a3b8; }
+        .rank-badge.bronze { background: #d97706; }
+        .rank-badge.normal { background: #9ca3af; }
+        .rank-bar-track { flex: 1; height: 28px; background: #f3f4f6; border-radius: 6px; overflow: hidden; }
+        .rank-bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 10px; color: #fff; font-size: 12px; font-weight: 600; }
+        .rank-pct { font-size: 14px; font-weight: 700; color: #1f2937; width: 52px; text-align: right; }
+
+        /* ---- 平台分析表格 ---- */
+        .platform-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .platform-table thead th {
+            background: #eef2ff; color: #4b5563; font-weight: 700;
+            padding: 12px 10px; text-align: center; white-space: nowrap;
+        }
+        .platform-table thead th:first-child { border-radius: 8px 0 0 8px; }
+        .platform-table thead th:last-child { border-radius: 0 8px 8px 0; }
+        .platform-table td {
+            padding: 12px 10px; text-align: center; color: #374151;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .platform-table tbody tr:nth-child(even) { background: #f9fafb; }
+        .platform-table tbody tr:nth-child(odd) { background: #fff; }
+        .plat-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+        .plat-dot.orange-dot { background: #f97316; }
+        .plat-dot.blue-dot { background: #3b82f6; }
+        .plat-dot.green-dot { background: #22c55e; }
+        .plat-dot.indigo-dot { background: #6366f1; }
+        .plat-dot.purple-dot { background: #8b5cf6; }
+
+        @media (max-width: 860px) {
+            .overview-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .brand-card { flex-direction: column; }
+            .brand-img { flex: 0 0 160px; }
+            .platform-table { min-width: 900px; }
         }
 
         @media (max-width: 1220px) {
@@ -538,6 +696,17 @@
             </article>
         </section>
 
+        <!-- 模块二：品牌画像 -->
+        <div class="module-title">二、品牌画像</div>
+        <div class="brand-card">
+            <div class="brand-img">🏢 建筑/钢结构图片</div>
+            <div class="brand-info">
+                <p><strong>公司名称：</strong>安徽得心金属制品有限公司</p>
+                <p><strong>品牌名称：</strong>安徽得心金属制品有限公司, 得心, 安徽得心, 得心金属</p>
+                <p><strong>核心服务：</strong>卷板楼梯, 叠步楼梯, 悬挑楼梯, 旋转楼梯, 钢结构旋转楼梯</p>
+            </div>
+        </div>
+
         <section class="section-card chart-card">
             <h2 class="section-title">各平台问题占比</h2>
             <div class="chart-layout">
@@ -562,6 +731,56 @@
             </div>
         </section>
 
+        <!-- 模块三：AI搜索整体概况 -->
+        <div class="module-title">三、AI搜索整体概况</div>
+        <div class="overview-subtitle">品牌前五综合占比</div>
+        <div class="section-card" style="padding: 28px;">
+            <div class="overview-layout">
+                <div class="donut-area">
+                    <div class="donut-ring">
+                        <div class="donut-center">85.55<span>%</span></div>
+                    </div>
+                </div>
+                <div class="overview-metrics">
+                    <div class="metric-mini">
+                        <div class="m-num">85.55%</div>
+                        <div class="m-label">品牌前五占比</div>
+                    </div>
+                    <div class="metric-mini purple">
+                        <div class="m-num">420</div>
+                        <div class="m-label">品牌前五次數</div>
+                    </div>
+                </div>
+                <div class="rank-bars">
+                    <div class="rank-item">
+                        <div class="rank-badge gold">♛</div>
+                        <div class="rank-bar-track"><div class="rank-bar-fill" style="width:100%;background:linear-gradient(90deg,#f97316,#f59e0b)">55.91%</div></div>
+                        <div class="rank-pct">55.91%</div>
+                    </div>
+                    <div class="rank-item">
+                        <div class="rank-badge silver">2</div>
+                        <div class="rank-bar-track"><div class="rank-bar-fill" style="width:25.2%;background:#6366f1">14.09%</div></div>
+                        <div class="rank-pct">14.09%</div>
+                    </div>
+                    <div class="rank-item">
+                        <div class="rank-badge bronze">3</div>
+                        <div class="rank-bar-track"><div class="rank-bar-fill" style="width:7.2%;background:#ef4444">4.01%</div></div>
+                        <div class="rank-pct">4.01%</div>
+                    </div>
+                    <div class="rank-item">
+                        <div class="rank-badge normal">4</div>
+                        <div class="rank-bar-track"><div class="rank-bar-fill" style="width:9.1%;background:#06b6d4">5.11%</div></div>
+                        <div class="rank-pct">5.11%</div>
+                    </div>
+                    <div class="rank-item">
+                        <div class="rank-badge normal">5</div>
+                        <div class="rank-bar-track"><div class="rank-bar-fill" style="width:11.5%;background:#22c55e">6.42%</div></div>
+                        <div class="rank-pct">6.42%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <section class="section-card tabs-card">
             <div class="report-tab">营销报表</div>
             <div class="tabs-line"></div>
@@ -580,6 +799,47 @@
                 <div class="platform-tab"><img src="icon-tongyi.png" class="tab-icon" alt=""><div><strong>通义千问</strong><br>电脑端 <span class="tab-count">(6176)</span></div></div>
                 <div class="platform-tab"><img src="icon-tongyi.png" class="tab-icon" alt=""><div><strong>通义千问</strong><br>移动端 <span class="tab-count">(6176)</span></div></div>
             </div>
+        </section>
+
+        <!-- 模块四：AI搜索平台分析 -->
+        <div class="module-title">四、AI搜索平台分析</div>
+        <section class="section-card" style="padding: 28px; overflow-x: auto;">
+            <table class="platform-table">
+                <thead>
+                    <tr>
+                        <th>对比维度</th>
+                        <th>搜索推荐分析次数</th>
+                        <th>品牌词TOP1占比</th>
+                        <th>品牌词TOP2占比</th>
+                        <th>品牌词TOP3占比</th>
+                        <th>品牌词TOP4占比</th>
+                        <th>品牌词TOP5占比</th>
+                        <th>信源站点数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="plat-dot orange-dot"></span>豆包</td>
+                        <td>130次</td><td>53.33%</td><td>19.7%</td><td>1.21%</td><td>4.85%</td><td>5.76%</td><td>54692</td>
+                    </tr>
+                    <tr>
+                        <td><span class="plat-dot blue-dot"></span>DeepSeek</td>
+                        <td>31次</td><td>29.31%</td><td>13.79%</td><td>14.66%</td><td>27.59%</td><td>0%</td><td>3911</td>
+                    </tr>
+                    <tr>
+                        <td><span class="plat-dot green-dot"></span>腾讯元宝</td>
+                        <td>48次</td><td>28.57%</td><td>22.86%</td><td>0%</td><td>0%</td><td>14.29%</td><td>7408</td>
+                    </tr>
+                    <tr>
+                        <td><span class="plat-dot indigo-dot"></span>文心一言</td>
+                        <td>166次</td><td>77.13%</td><td>10.71%</td><td>0%</td><td>0%</td><td>0.24%</td><td>57172</td>
+                    </tr>
+                    <tr>
+                        <td><span class="plat-dot purple-dot"></span>千问</td>
+                        <td>116次</td><td>53.35%</td><td>9.65%</td><td>9.12%</td><td>5.9%</td><td>12.87%</td><td>13665</td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
 
         <section class="section-card table-card">
