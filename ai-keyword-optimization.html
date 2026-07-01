@@ -45,21 +45,107 @@
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 24px;
             margin-top: 28px;
         }
 
-        .stat-card,
         .section-card {
             background: #fff;
             border: 1px solid #e6ebf2;
             border-radius: 10px;
         }
 
+        /* 大指标卡 - AI大模型排名收录总量 */
+        .metric-big {
+            position: relative;
+            background: #fff;
+            border: 1px solid #e6ebf2;
+            border-radius: 10px;
+            padding: 28px 30px;
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        .metric-big-illust {
+            flex: 0 0 auto;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #e8f0fe 0%, #d4e4ff 100%);
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            font-size: 36px;
+        }
+
+        .metric-big-body {
+            flex: 1;
+        }
+
+        .metric-big-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #5f6b7a;
+            font-size: 14px;
+            font-family: Inter, system-ui, sans-serif;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .metric-big-title .info-dot {
+            display: inline-grid;
+            place-items: center;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1.5px solid #c0c6d1;
+            color: #8b97a7;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: help;
+        }
+
+        .metric-big-value {
+            color: #020617;
+            font-size: 42px;
+            font-family: Inter, system-ui, sans-serif;
+            font-weight: 800;
+            letter-spacing: 1px;
+            line-height: 1.1;
+        }
+
+        .metric-big-tags {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .metric-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-family: Inter, system-ui, sans-serif;
+            font-weight: 600;
+        }
+
+        .metric-tag.blue-tag {
+            background: #e9f0ff;
+            color: #2563eb;
+        }
+
+        /* 小统计卡 */
         .stat-card {
             position: relative;
-            height: 178px;
+            background: #fff;
+            border: 1px solid #e6ebf2;
+            border-radius: 10px;
+            height: 100%;
+            min-height: 178px;
             padding: 38px 25px;
         }
 
@@ -95,12 +181,8 @@
             height: 20px;
         }
 
-        .blue { background: #e9efff; }
-        .blue svg { fill: #2467ff; }
         .cyan { background: #e6fbf9; }
         .cyan svg { fill: #20d2bd; }
-        .purple { background: #f1e7ff; }
-        .purple svg { fill: #8b39df; }
         .orange { background: #fff1d7; }
         .orange svg { fill: #ff702e; }
 
@@ -423,7 +505,7 @@
             }
 
             .data-table {
-                min-width: 850px;
+                min-width: 1100px;
             }
         }
     </style>
@@ -435,27 +517,22 @@
         </section>
 
         <section class="stats">
-            <article class="stat-card">
-                <div class="stat-label">总问题量</div>
-                <div class="stat-value">20539</div>
-                <div class="stat-icon blue">
-                    <img src="icon-label.svg" alt="" style="width:20px;height:20px;">
+            <!-- 大指标卡 -->
+            <article class="metric-big">
+                <div class="metric-big-illust">📊</div>
+                <div class="metric-big-body">
+                    <div class="metric-big-title">
+                        AI大模型排名收录总量
+                        <span class="info-dot" title="基于6大AI平台收录量统计">ⓘ</span>
+                    </div>
+                    <div class="metric-big-value">46,431</div>
+                    <div class="metric-big-tags">
+                        <span class="metric-tag blue-tag">今日新增 66</span>
+                        <span class="metric-tag blue-tag">近7日 6,475</span>
+                    </div>
                 </div>
             </article>
-            <article class="stat-card">
-                <div class="stat-label">收录问题</div>
-                <div class="stat-value">46431</div>
-                <div class="stat-icon cyan">
-                    <img src="icon-note.svg" alt="" style="width:20px;height:20px;">
-                </div>
-            </article>
-            <article class="stat-card">
-                <div class="stat-label">品牌词量</div>
-                <div class="stat-value">3</div>
-                <div class="stat-icon purple">
-                    <img src="icon-globe.svg" alt="" style="width:20px;height:20px;">
-                </div>
-            </article>
+            <!-- 覆盖平台小卡 -->
             <article class="stat-card">
                 <div class="stat-label">覆盖平台</div>
                 <div class="stat-value">6</div>
@@ -524,25 +601,30 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th style="width: 115px;">序号</th>
-                        <th style="width: 150px;">训练词</th>
+                        <th style="width:60px;">序号</th>
+                        <th style="width:90px;">训练词</th>
                         <th>问题</th>
-                        <th style="width: 160px;">平台</th>
-                        <th style="width: 145px;">来源</th>
-                        <th style="width: 165px;">上线时间</th>
+                        <th style="width:110px;">平台</th>
+                        <th style="width:65px;">来源</th>
+                        <th style="width:70px;">TOP1</th>
+                        <th style="width:70px;">TOP2</th>
+                        <th style="width:70px;">TOP3</th>
+                        <th style="width:70px;">TOP4</th>
+                        <th style="width:70px;">TOP5</th>
+                        <th style="width:115px;">上线时间</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>1</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>DeepSeek</td><td>PC</td><td>2026-06-18</td></tr>
-                    <tr><td>2</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>DeepSeek</td><td>Mobile</td><td>2026-06-18</td></tr>
-                    <tr><td>3</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>百度文心</td><td>PC</td><td>2026-06-18</td></tr>
-                    <tr><td>4</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>百度文心</td><td>Mobile</td><td>2026-06-18</td></tr>
-                    <tr><td>5</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>通义千问</td><td>PC</td><td>2026-06-18</td></tr>
-                    <tr><td>6</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>通义千问</td><td>Mobile</td><td>2026-06-18</td></tr>
-                    <tr><td>7</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>Kimi</td><td>PC</td><td>2026-06-18</td></tr>
-                    <tr><td>8</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>Kimi</td><td>Mobile</td><td>2026-06-18</td></tr>
-                    <tr><td>9</td><td>滤波器</td><td>EMI滤波器供应厂家</td><td>腾讯元宝</td><td>PC</td><td>2026-06-18</td></tr>
-                    <tr><td>10</td><td>滤波器</td><td>EMI滤波器供应厂家</td><td>腾讯元宝</td><td>Mobile</td><td>2026-06-18</td></tr>
+                    <tr><td>1</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>DeepSeek</td><td>PC</td><td>32.5%</td><td>25.1%</td><td>18.3%</td><td>14.2%</td><td>9.9%</td><td>2026-06-18</td></tr>
+                    <tr><td>2</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>DeepSeek</td><td>Mobile</td><td>30.8%</td><td>26.4%</td><td>17.9%</td><td>15.1%</td><td>9.8%</td><td>2026-06-18</td></tr>
+                    <tr><td>3</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>百度文心</td><td>PC</td><td>35.2%</td><td>22.8%</td><td>19.1%</td><td>13.5%</td><td>9.4%</td><td>2026-06-18</td></tr>
+                    <tr><td>4</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>百度文心</td><td>Mobile</td><td>33.9%</td><td>24.3%</td><td>18.7%</td><td>14.0%</td><td>9.1%</td><td>2026-06-18</td></tr>
+                    <tr><td>5</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>通义千问</td><td>PC</td><td>28.6%</td><td>27.2%</td><td>20.5%</td><td>13.8%</td><td>9.9%</td><td>2026-06-18</td></tr>
+                    <tr><td>6</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>通义千问</td><td>Mobile</td><td>27.4%</td><td>28.1%</td><td>18.9%</td><td>15.3%</td><td>10.3%</td><td>2026-06-18</td></tr>
+                    <tr><td>7</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>Kimi</td><td>PC</td><td>31.1%</td><td>26.7%</td><td>17.4%</td><td>14.9%</td><td>9.9%</td><td>2026-06-18</td></tr>
+                    <tr><td>8</td><td>滤波器</td><td>通用型电源滤波器供货商</td><td>Kimi</td><td>Mobile</td><td>29.8%</td><td>25.9%</td><td>19.2%</td><td>14.6%</td><td>10.5%</td><td>2026-06-18</td></tr>
+                    <tr><td>9</td><td>滤波器</td><td>EMI滤波器供应厂家</td><td>腾讯元宝</td><td>PC</td><td>34.3%</td><td>23.5%</td><td>18.1%</td><td>14.0%</td><td>10.1%</td><td>2026-06-18</td></tr>
+                    <tr><td>10</td><td>滤波器</td><td>EMI滤波器供应厂家</td><td>腾讯元宝</td><td>Mobile</td><td>32.7%</td><td>24.9%</td><td>17.6%</td><td>14.8%</td><td>10.0%</td><td>2026-06-18</td></tr>
                 </tbody>
             </table>
             <div class="pager">
