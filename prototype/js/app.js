@@ -664,12 +664,12 @@ function highlightPackage(packageId) {
 }
 
 // 点击卡片上「立即购买」按钮
-function purchaseOnePackage(packageId) {
+function purchaseOnePackage(packageId, isUpgrade) {
   if (packageId === currentGeoPackage) {
     showToast('您已开通此套餐，如需升级请点击"升级套餐"按钮', 'warning');
     return;
   }
-  showGeoPaymentModal(packageId);
+  showGeoPaymentModal(packageId, isUpgrade);
 }
 
 // 点击「立即购买」按钮（底部全局，已废弃）
@@ -700,6 +700,7 @@ function updateGeoPriceCalc() {
 function showGeoPaymentModal(packageId, isUpgrade) {
   const pkg = GEO_RESOURCE_PACKAGES[packageId];
   const typeLabel = isUpgrade ? '升级' : '购买';
+  const pr = (isUpgrade && packageId === 'pro') ? window._geoProration : null;
   const now = new Date();
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -710,14 +711,25 @@ function showGeoPaymentModal(packageId, isUpgrade) {
   const expMonth = String(expireDate.getMonth() + 1).padStart(2, '0');
   const expDay = String(expireDate.getDate()).padStart(2, '0');
   const expireStr = `${expYear}-${expMonth}-${expDay}`;
+  function fmt(n) { return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
   const bodyHtml = `
     <div class="payment-plan-summary">
       <div class="payment-plan-header">
         <span class="payment-plan-name">${pkg.name}</span>
-        <span class="payment-plan-price">¥${pkg.totalPrice.toLocaleString()}<small>/月</small></span>
-      </div>
+        <span class="payment-plan-price">${pr ? '<span style="text-decoration:line-through;color:#94A3B8;font-size:14px;font-weight:400;margin-right:6px">¥' + pkg.totalPrice.toLocaleString() + '</span><span style="color:#10B981">¥' + fmt(pr.afterProration) + '</span>' : '¥' + pkg.totalPrice.toLocaleString()}<small>/月</small></span>
+      </div>${pr ? `` : ''}
       <div class="payment-plan-specs">
+        ${pr ? `
+        <div class="payment-spec-item">
+          <span class="payment-spec-label">可折算金额</span>
+          <span class="payment-spec-value">¥${fmt(pr.prorationAmount)}</span>
+        </div>
+        <div class="payment-spec-item">
+          <span class="payment-spec-label">折后应付</span>
+          <span class="payment-spec-value" style="color:#10B981;font-weight:600">¥${fmt(pr.afterProration)}</span>
+        </div>
+        ` : ''}
         <div class="payment-spec-item">
           <span class="payment-spec-label">资源通道</span>
           <span class="payment-spec-value">${pkg.resources} 条</span>
@@ -909,19 +921,30 @@ function selectGeoPackageFromCard(packageId) {
 function showUpgradeModal() {
   const pkg = GEO_RESOURCE_PACKAGES[currentGeoPackage];
   const upgradeOptions = Object.values(GEO_RESOURCE_PACKAGES).filter(p => p.resources > pkg.resources);
+  const pr = window._geoProration;
 
-  const optionsHtml = upgradeOptions.map(p => `
+  function fmt(n) { return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+
+  const optionsHtml = upgradeOptions.map(p => {
+    const isThisProrated = pr && p.id === 'pro';
+    return `
     <div class="upgrade-option" data-package="${p.id}" onclick="confirmDirectUpgrade('${p.id}')">
       <div class="upgrade-option-left">
         <div class="upgrade-option-name">${p.name}</div>
         <div class="upgrade-option-spec">${p.resources} 条资源通道 · ${p.desc}</div>
+        ${isThisProrated ? `
+          <div class="upgrade-proration-rows">
+            <div class="upgrade-proration-item"><span>可折算金额</span><span>¥${fmt(pr.prorationAmount)}</span></div>
+            <div class="upgrade-proration-item"><span>折后应付</span><span style="color:#10B981;font-weight:600">¥${fmt(pr.afterProration)}</span></div>
+          </div>
+        ` : ''}
       </div>
       <div class="upgrade-option-right">
         <div class="upgrade-option-price">¥${p.totalPrice.toLocaleString()}<small>/月</small></div>
         <button class="btn btn-primary btn-sm">升级</button>
       </div>
     </div>
-  `).join('');
+  `}).join('');
 
   const bodyHtml = `
     <div class="upgrade-current">

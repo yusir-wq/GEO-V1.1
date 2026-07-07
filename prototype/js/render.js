@@ -1274,7 +1274,7 @@ function renderApiCollectionPanel() {
 
 function renderTenantSettingsGeoResource() {
   const activeTab = window.geoResourceTab || 'purchased';
-  const activePlan = { name: '标准版', resources: 5, status: '生效中', expireDate: '2026-08-20', remainingDays: 58 };
+  const activePlan = { name: '标准版', resources: 5, status: '生效中', expireDate: '2026-08-20', remainingDays: 58, totalPrice: 1000 };
   const expiredPlan = { name: '标准版', resources: 5, status: '已到期', expireDate: '2026-06-01', remainingDays: 0 };
 
   const allPackages = [
@@ -1282,6 +1282,34 @@ function renderTenantSettingsGeoResource() {
     { id: 'standard', name: '标准版', resources: 5, desc: '适合日常任务，稳定交付', unitPrice: 200, totalPrice: 1000 },
     { id: 'pro', name: '极速版', resources: 10, desc: '适合批量任务，高速交付', unitPrice: 150, totalPrice: 1500 }
   ];
+
+  // ── 折算计算 ──
+  function formatPrice(val) {
+    return '¥' + val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function calcProration(targetTotalPrice) {
+    var remainingDays = activePlan.remainingDays;
+    if (remainingDays <= 0) return null;
+    // 实际剩余自然日
+    var today = new Date(); today.setHours(0,0,0,0);
+    var expire = new Date(activePlan.expireDate); expire.setHours(0,0,0,0);
+    var realRemaining = Math.max(1, Math.ceil((expire - today) / (1000 * 60 * 60 * 24)));
+    // 生效总天数按 30 天/月
+    var subscriptionDays = 30;
+    var rawProration = Math.round((activePlan.totalPrice / subscriptionDays) * realRemaining);
+    // 折算后价格 = 新套餐价格 - 折算金额（最低为卡片显示价 500）
+    var afterProration = Math.max(500, targetTotalPrice - rawProration);
+    return {
+      remainingDays: realRemaining,
+      prorationAmount: targetTotalPrice - afterProration,
+      afterProration: afterProration,
+      isFree: rawProration >= targetTotalPrice
+    };
+  }
+
+  // 存储折算数据供 app.js 使用
+  var proProration = calcProration(1500);
+  window._geoProration = proProration;
 
   const tabItems = [
     { id: 'unpurchased', label: '未购买' },
@@ -1311,14 +1339,19 @@ function renderTenantSettingsGeoResource() {
       const timeDesc = calcTime(p.resources);
       const isRecommended = p.id === recommendId;
       const isCurrent = p.id === currentGeoPackage && !opts.expired;
+      // 已购买 Tab 中极速版卡片显示折算
+      const showProration = opts.showProration && p.id === 'pro' && proProration;
       let btnHtml;
       if (opts.forceBuy) {
         btnHtml = `<button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="event.stopPropagation();purchaseOnePackage('${p.id}')">立即购买</button>`;
       } else if (isCurrent) {
         btnHtml = `<button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="event.stopPropagation();showRenewModal()">立即续费</button>`;
       } else {
-        btnHtml = `<button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="event.stopPropagation();purchaseOnePackage('${p.id}')">立即升级</button>`;
+        btnHtml = `<button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="event.stopPropagation();purchaseOnePackage('${p.id}',true)">立即升级</button>`;
       }
+      const priceHtml = showProration
+        ? `<div class="package-card-price-row"><div class="package-card-price"><span style="text-decoration:line-through;color:#94A3B8;font-size:14px;font-weight:400;margin-right:8px">¥${p.totalPrice.toLocaleString()}</span><span style="color:#10B981;font-size:18px;font-weight:700">¥500</span><span style="font-size:13px;color:#94A3B8;font-weight:400">/月</span></div><div class="package-card-proration-note">折算金额自动抵扣新套餐费用</div></div>`
+        : `<div class="package-card-price">¥${p.totalPrice.toLocaleString()}<span style="font-size:13px;color:#94A3B8;font-weight:400">/月</span></div>`;
       return `
         <div class="package-card ${isRecommended ? 'active' : ''}" data-package="${p.id}">
           <div class="package-card-header">
@@ -1331,7 +1364,7 @@ function renderTenantSettingsGeoResource() {
             <div class="package-card-feature">100个问题约 ${timeDesc}</div>
             <div class="package-card-feature">${p.desc}</div>
           </div>
-          <div class="package-card-price">¥${p.totalPrice.toLocaleString()}<span style="font-size:13px;color:#94A3B8;font-weight:400">/月</span></div>
+          ${priceHtml}
           ${btnHtml}
         </div>`;
     }).join('');
@@ -1343,7 +1376,7 @@ function renderTenantSettingsGeoResource() {
         <div class="geo-rules-title">订阅说明</div>
         <div class="geo-rules-content">
           <div class="geo-rule-item">
-            <div class="geo-rule-text">1. 套餐续费：续费后将在当前到期时间基础上延长服务时长。<br>2. 套餐升级：升级后新套餐立即生效，有效期重新计算。原套餐剩余时间不再累计或折算。<br>3. 套餐降级：当前订阅周期内暂不支持降级，可在套餐到期后重新选择套餐。<br>4. 资源到期：资源到期后，已提交的任务会继续完成；新任务需续费后使用，或切换至自有 API 采集。</div>
+            <div class="geo-rule-text">1. 套餐续费：续费后将在当前到期时间基础上延长服务时长。<br>2. 套餐升级：升级后新套餐立即生效，有效期重新计算。原套餐剩余时间不再累计或折算。<br>3. 套餐降级：当前订阅周期内暂不支持降级，可在套餐到期后重新选择套餐。<br>4. 资源到期：资源到期后，已提交的任务会继续完成；新任务需续费后使用，或切换至自有 API 采集。${proProration ? '<br>5. 折算计费：按剩余天数折算，公式：套餐总价÷生效天数×剩余天数' : ''}</div>
           </div>
         </div>
       </div>
@@ -1378,7 +1411,7 @@ function renderTenantSettingsGeoResource() {
     ${purchasedStatusCard}
     <div class="section-title" style="margin-top:24px">续费&升级方案</div>
     <div class="section-desc">升级套餐可获得更多资源通道，轻松应对批量任务。</div>
-    <div class="package-grid">${renderPackageCards(purchasedPackages, { recommendId: 'pro' })}</div>
+    <div class="package-grid">${renderPackageCards(purchasedPackages, { recommendId: 'pro', showProration: true })}</div>
     ${rulesHtml}`;
 
   // ── 已到期 Tab ──

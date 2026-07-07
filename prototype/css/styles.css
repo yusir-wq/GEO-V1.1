@@ -1483,6 +1483,31 @@ img, svg {
   margin-left: 2px;
 }
 
+.package-card-proration {
+  font-size: 12px;
+  color: var(--color-success);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.package-card-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.package-card-price-row .package-card-price {
+  flex-shrink: 0;
+}
+
+.package-card-proration-note {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
 /* ========================================
    25. 实时采集 - AI平台选择
    ======================================== */
@@ -2595,6 +2620,26 @@ img, svg {
   background: var(--color-warning-bg);
   border-radius: var(--radius-sm);
   line-height: 1.5;
+}
+
+/* 升级弹窗 - 折算信息（内联字段） */
+.upgrade-proration-rows {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.upgrade-proration-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  padding: 3px 0;
+}
+
+.upgrade-proration-item span:first-child {
+  color: var(--color-text-tertiary);
 }
 
 /* ========================================
