@@ -198,6 +198,12 @@ function renderAdmin(pageId) {
       return renderAdminAnalytics();
     case 'admin-settings':
       return renderAdminSettings();
+    case 'admin-sitefarm-templates':
+      return renderAdminSitefarmTemplates();
+    case 'admin-tdk-variables':
+      return renderAdminTdkVariables();
+    case 'admin-sitefarm-saas-users':
+      return renderAdminSitefarmSaasUsers();
     default:
       return H.pageHeader('页面未找到', '该页面不存在');
   }
@@ -477,6 +483,8 @@ function renderTenant(pageId) {
       return renderTenantCustomers();
     case 'tenant-projects':
       return renderTenantProjects();
+    case 'tenant-report-settings':
+      return renderReportSettings();
     case 'tenant-knowledge':
       return renderTenantKnowledge();
     case 'tenant-ai-article':
@@ -497,6 +505,18 @@ function renderTenant(pageId) {
       return renderTenantReports();
     case 'tenant-settings':
       return renderTenantSettings();
+    case 'tenant-sitefarm-profiles':
+      return renderTenantSitefarmProfiles();
+    case 'tenant-sitefarm-templates':
+      return renderTenantSitefarmTemplates();
+    case 'tenant-training-words':
+      return renderTenantTrainingWords();
+    case 'tenant-tdk-templates':
+      return renderTenantTdkTemplates();
+    case 'tenant-kuaitong':
+      return renderTenantKuaitong();
+    case 'tenant-geo-articles':
+      return renderTenantGeoArticles();
     default:
       return H.pageHeader('页面未找到', '该页面不存在');
   }
@@ -787,37 +807,9 @@ function renderTenantCustomers() {
   ) + tableHtml;
 }
 
-/* --- 租户 - 项目管理 --- */
+/* --- 租户 - 项目管理 (已迁移至 pages/sitefarm/tenant/project-management.js) --- */
 function renderTenantProjects() {
-  return H.pageHeader('项目管理', '管理客户GEO项目进度',
-    '<button class="btn btn-primary">+ 创建项目</button>'
-  ) +
-    H.table({
-      title: '项目列表',
-      count: 67,
-      columns: [
-        { key: 'name', label: '项目名称' },
-        { key: 'customer', label: '客户' },
-        { key: 'manager', label: '负责人' },
-        { key: 'progress', label: '进度', render: (val) => `
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="flex:1;height:6px;background:#F1F5F9;border-radius:3px;overflow:hidden;min-width:80px">
-              <div style="width:${val}%;height:100%;background:${val >= 80 ? '#10B981' : val >= 50 ? '#F59E0B' : '#2563EB'};border-radius:3px"></div>
-            </div>
-            <span style="font-size:12px;color:#475569">${val}%</span>
-          </div>` },
-        { key: 'status', label: '状态', render: (val) => `<span class="badge badge-${val === '进行中' ? 'info' : val === '已完成' ? 'success' : 'warning'}">${val}</span>` },
-        { key: 'actions', label: '操作', render: () =>
-          '<div class="table-actions"><button class="btn btn-ghost btn-sm">详情</button><button class="btn btn-ghost btn-sm">编辑</button></div>'
-        }
-      ],
-      rows: [
-        { name: '星辰科技GEO优化项目', customer: '杭州星辰科技', manager: '林小红', progress: 75, status: '进行中' },
-        { name: '云帆网络品牌提升', customer: '上海云帆网络', manager: '周大伟', progress: 100, status: '已完成' },
-        { name: '智联传媒SEO项目', customer: '北京智联传媒', manager: '林小红', progress: 30, status: '进行中' },
-        { name: '万通信息GEO项目', customer: '广州万通信息', manager: '吴美丽', progress: 10, status: '规划中' }
-      ]
-    });
+  return window.renderTenantProjects ? window.renderTenantProjects() : '<div class="empty-state">项目管理模块未加载</div>';
 }
 
 /* --- 租户 - 企业知识库 --- */
@@ -1770,6 +1762,12 @@ function renderEndUser(pageId) {
       return renderFinance('enduser');
     case 'enduser-settings':
       return renderEndUserSettings();
+    case 'enduser-sitefarm-profile':
+      return renderEndUserSitefarmProfile();
+    case 'enduser-kuaitong':
+      return renderEndUserKuaitong();
+    case 'enduser-geo-articles':
+      return renderEndUserGeoArticles();
     default:
       return H.pageHeader('页面未找到', '该页面不存在');
   }

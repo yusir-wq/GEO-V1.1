@@ -23,6 +23,14 @@ const PORT_CONFIG = {
           { id: 'admin-analytics', label: '运营分析', icon: 'chart' },
           { id: 'admin-settings', label: '系统设置', icon: 'settings' }
         ]
+      },
+      {
+        section: '站群管理',
+        items: [
+          { id: 'admin-sitefarm-templates', label: '网站模板管理', icon: 'book' },
+          { id: 'admin-tdk-variables', label: 'TDK变量管理', icon: 'file-text' },
+          { id: 'admin-sitefarm-saas-users', label: 'SAAS用户站群配置', icon: 'users' }
+        ]
       }
     ],
     user: {
@@ -66,6 +74,17 @@ const PORT_CONFIG = {
           { id: 'tenant-logs', label: '操作日志', icon: 'file-text' },
           { id: 'tenant-reports', label: '数据报表', icon: 'chart' },
           { id: 'tenant-settings', label: '系统设置', icon: 'settings' }
+        ]
+      },
+      {
+        section: '站群管理',
+        items: [
+          { id: 'tenant-sitefarm-profiles', label: '基础资料管理', icon: 'id-card' },
+          { id: 'tenant-sitefarm-templates', label: '网站模板管理', icon: 'book' },
+          { id: 'tenant-training-words', label: '训练词管理', icon: 'sparkles' },
+          { id: 'tenant-tdk-templates', label: 'TDK模板管理', icon: 'file-text' },
+          { id: 'tenant-kuaitong', label: '快通管理', icon: 'send' },
+          { id: 'tenant-geo-articles', label: 'GEO文章管理', icon: 'file-text' }
         ]
       }
     ],
@@ -135,6 +154,14 @@ const PORT_CONFIG = {
           { id: 'enduser-finance', label: '财务记录', icon: 'banknote' },
           { id: 'enduser-settings', label: '账户设置', icon: 'settings' }
         ]
+      },
+      {
+        section: '站群管理',
+        items: [
+          { id: 'enduser-sitefarm-profile', label: '基本信息', icon: 'id-card' },
+          { id: 'enduser-kuaitong', label: '快通管理', icon: 'send' },
+          { id: 'enduser-geo-articles', label: 'GEO文章管理', icon: 'file-text' }
+        ]
       }
     ],
     user: {
@@ -157,6 +184,9 @@ const PAGE_TITLES = {
   'admin-announcements': '消息公告',
   'admin-analytics': '运营分析',
   'admin-settings': '系统设置',
+  'admin-sitefarm-templates': '网站模板管理',
+  'admin-tdk-variables': 'TDK变量管理',
+  'admin-sitefarm-saas-users': 'SAAS用户站群配置',
 
   // 租户管理
   'tenant-dashboard': '工作台',
@@ -165,6 +195,7 @@ const PAGE_TITLES = {
   'tenant-orders': '订单管理',
   'tenant-customers': '客户管理',
   'tenant-projects': '项目管理',
+  'tenant-report-settings': '报表设置',
   'tenant-knowledge': '企业知识库',
   'tenant-ai-article': 'AI文章生成',
   'tenant-media': '媒体投稿',
@@ -175,6 +206,12 @@ const PAGE_TITLES = {
   'tenant-logs': '操作日志',
   'tenant-reports': '数据报表',
   'tenant-settings': '系统设置',
+  'tenant-sitefarm-profiles': '基础资料管理',
+  'tenant-sitefarm-templates': '网站模板管理',
+  'tenant-training-words': '训练词管理',
+  'tenant-tdk-templates': 'TDK模板管理',
+  'tenant-kuaitong': '快通管理',
+  'tenant-geo-articles': 'GEO文章管理',
 
   // 代理商
   'agent-dashboard': '工作台',
@@ -195,7 +232,10 @@ const PAGE_TITLES = {
   'enduser-deliverables': '交付成果',
   'enduser-knowledge': '企业知识库',
   'enduser-finance': '财务记录',
-  'enduser-settings': '账户设置'
+  'enduser-settings': '账户设置',
+  'enduser-sitefarm-profile': '基本信息',
+  'enduser-kuaitong': '快通管理',
+  'enduser-geo-articles': 'GEO文章管理'
 };
 
 /* ========================================

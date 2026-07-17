@@ -57,7 +57,9 @@ const ICON_MAP = {
   'swords': lucideIcon('<polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/>'),
   'rotate-ccw': lucideIcon('<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>'),
   'clock': lucideIcon('<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'),
-  'chevron-down': lucideIcon('<path d="m6 9 6 6 6-6"/>')
+  'chevron-down': lucideIcon('<path d="m6 9 6 6 6-6"/>'),
+  'plus': lucideIcon('<path d="M5 12h14"/><path d="M12 5v14"/>'),
+  'image': lucideIcon('<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>')
 };
 
 window.getLucideIcon = function(name, fallback = 'file-text') {
@@ -341,7 +343,7 @@ function showModal(type) {
   }
 
   const overlayHtml = `
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-overlay active" id="modalOverlay" onclick="closeModalOnOverlay(event)">
       <div class="modal">
         <div class="modal-header">
           <h2 class="modal-title">${title}</h2>
@@ -847,7 +849,7 @@ function showGeoPaymentModal(packageId, isUpgrade) {
     </div>`;
 
   const overlayHtml = `
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-overlay active" id="modalOverlay" onclick="closeModalOnOverlay(event)">
       <div class="modal modal--payment">
         <div class="modal-header">
           <h2 class="modal-title">${typeLabel}GEO采集资源套餐</h2>
@@ -959,7 +961,7 @@ function showUpgradeModal() {
     </div>`;
 
   const overlayHtml = `
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-overlay active" id="modalOverlay" onclick="closeModalOnOverlay(event)">
       <div class="modal modal--payment">
         <div class="modal-header">
           <h2 class="modal-title">升级套餐</h2>
@@ -1050,7 +1052,7 @@ function showRenewModal() {
     </div>`;
 
   const overlayHtml = `
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-overlay active" id="modalOverlay" onclick="closeModalOnOverlay(event)">
       <div class="modal modal--payment">
         <div class="modal-header">
           <h2 class="modal-title">续费套餐</h2>
@@ -1232,7 +1234,7 @@ function showProjectOrderModal(cdata) {
     </div>`;
 
   const overlayHtml = `
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-overlay active" id="modalOverlay" onclick="closeModalOnOverlay(event)">
       <div class="modal modal--order">
         <div class="modal-header">
           <h2 class="modal-title">项目提单 — 固定收费</h2>
