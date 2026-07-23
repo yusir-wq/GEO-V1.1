@@ -494,7 +494,7 @@ function renderTenant(pageId) {
     case 'tenant-knowledge':
       return renderTenantKnowledge();
     case 'tenant-media':
-      return renderTenantMedia();
+      return window.renderTenantMedia ? window.renderTenantMedia() : renderTenantMediaFallback();
     case 'tenant-reports':
       return renderTenantReports();
     case 'tenant-crawl':
@@ -877,8 +877,8 @@ function renderTenantAiArticle() {
     });
 }
 
-/* --- 租户 - 媒体投稿 --- */
-function renderTenantMedia() {
+/* --- 租户 - 官媒投稿 (已迁移至 pages/sitefarm/tenant/official-media.js) --- */
+function renderTenantMediaFallback() {
   return H.pageHeader('媒体投稿', '管理媒体投稿和发布渠道',
     '<button class="btn btn-primary">+ 新建投稿</button>'
   ) +
