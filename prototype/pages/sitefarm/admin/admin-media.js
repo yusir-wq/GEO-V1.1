@@ -307,6 +307,13 @@
       display: block; font-size: 13px; color: var(--color-text-secondary);
       margin-bottom: 6px;
     }
+    /* 批量调价弹窗 radio label 必须内联水平 */
+    .am-price-radio-label {
+      display: inline-flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      white-space: nowrap !important;
+    }
     .am-modal-form-group input,
     .am-modal-form-group select {
       width: 100%; padding: 8px 12px; border: 1px solid var(--color-border);
@@ -1010,7 +1017,7 @@ function amToggleRowSelect(id, checked) {
 }
 
 /* ========================================
-   批量调价弹窗（与编辑售价弹窗一致）
+   批量调价弹窗（固定售价/加价/倍值）
    ======================================== */
 function openAmBatchEditPriceModal() {
   if (amSelectedIds.size === 0) {
@@ -1025,15 +1032,32 @@ function openAmBatchEditPriceModal() {
   overlay.innerHTML = `
     <div class="am-modal-content">
       <div class="am-modal-header">
-        <div class="am-modal-title">编辑实际售价</div>
+        <div class="am-modal-title">批量调价</div>
         <button class="am-modal-close" onclick="closeAmBatchEditPriceModal()"></button>
       </div>
       <div class="am-modal-body">
         <div class="am-modal-resource-name">已选 ${amSelectedIds.size} 个资源</div>
+        <div class="am-modal-form-group" style="margin-bottom:16px;">
+          <label style="margin-bottom:10px;display:block;">调价方式</label>
+          <div style="display:flex !important;gap:20px !important;flex-direction:row !important;">
+            <label class="am-price-radio-label" style="display:inline-flex !important;flex-direction:row !important;align-items:center;gap:4px;cursor:pointer;">
+              <input type="radio" name="am-batch-price-type" value="fixed" checked onchange="amSwitchBatchPriceType('fixed')" />
+              <span>固定售价</span>
+            </label>
+            <label class="am-price-radio-label" style="display:inline-flex !important;flex-direction:row !important;align-items:center;gap:4px;cursor:pointer;">
+              <input type="radio" name="am-batch-price-type" value="add" onchange="amSwitchBatchPriceType('add')" />
+              <span>加价</span>
+            </label>
+            <label class="am-price-radio-label" style="display:inline-flex !important;flex-direction:row !important;align-items:center;gap:4px;cursor:pointer;">
+              <input type="radio" name="am-batch-price-type" value="mult" onchange="amSwitchBatchPriceType('mult')" />
+              <span>倍值</span>
+            </label>
+          </div>
+        </div>
         <div class="am-modal-form-row">
           <div class="am-modal-form-group">
-            <label>主售价</label>
-            <input type="number" value="" step="0.01" placeholder="请输入价格" id="am-batch-price-input" />
+            <label id="am-batch-price-label">固定售价</label>
+            <input type="number" value="" step="0.01" placeholder="请输入" id="am-batch-price-input" />
           </div>
           <div class="am-modal-form-group">
             <label>本地状态</label>
@@ -1046,11 +1070,32 @@ function openAmBatchEditPriceModal() {
       </div>
       <div class="am-modal-footer">
         <button class="btn-cancel" onclick="closeAmBatchEditPriceModal()">取消</button>
-        <button class="btn-confirm" onclick="confirmAmBatchEditPrice()">保存并确认价格变动</button>
+        <button class="btn-confirm" onclick="confirmAmBatchEditPrice()">保存</button>
       </div>
     </div>
   `;
   document.body.appendChild(overlay);
+}
+
+function amSwitchBatchPriceType(type) {
+  const label = document.getElementById('am-batch-price-label');
+  const input = document.getElementById('am-batch-price-input');
+  if (!label || !input) return;
+  
+  switch(type) {
+    case 'fixed':
+      label.textContent = '固定售价';
+      input.placeholder = '请输入固定价格';
+      break;
+    case 'add':
+      label.textContent = '加价金额';
+      input.placeholder = '在成本价基础上加价';
+      break;
+    case 'mult':
+      label.textContent = '倍值';
+      input.placeholder = '成本价 × 倍值';
+      break;
+  }
 }
 
 function closeAmBatchEditPriceModal() {
@@ -1060,18 +1105,31 @@ function closeAmBatchEditPriceModal() {
 
 function confirmAmBatchEditPrice() {
   const priceInput = document.getElementById('am-batch-price-input');
-  const newPrice = parseFloat(priceInput.value);
+  const inputValue = parseFloat(priceInput.value);
+  const priceType = document.querySelector('input[name="am-batch-price-type"]:checked').value;
   
-  if (isNaN(newPrice) || newPrice < 0) {
-    showToast('请输入有效的价格', 'warning');
+  if (isNaN(inputValue) || inputValue < 0) {
+    showToast('请输入有效的数值', 'warning');
     return;
   }
   
   const count = amSelectedIds.size;
   
-  // 更新 AM_MEDIA_LIST 中的实际售价
+  // 根据调价方式更新价格
   AM_MEDIA_LIST.forEach(item => {
     if (amSelectedIds.has(item.id)) {
+      let newPrice;
+      switch(priceType) {
+        case 'fixed':
+          newPrice = inputValue;
+          break;
+        case 'add':
+          newPrice = item.costPrice + inputValue;
+          break;
+        case 'mult':
+          newPrice = item.costPrice * inputValue;
+          break;
+      }
       item.actualPrice = newPrice;
     }
   });

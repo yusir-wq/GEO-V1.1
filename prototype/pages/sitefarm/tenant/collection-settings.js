@@ -175,6 +175,29 @@
     .btn-sm .lucide-icon { width: 14px; height: 14px; }
     .cs-tuoci-footer .lucide-icon, .cs-cat-manage-footer .lucide-icon { width: 14px; height: 14px; }
     a .lucide-icon { width: 14px; height: 14px; }
+
+    /* ===== 拓词工具步骤条 ===== */
+    .cs-step-bar { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 16px; padding: 12px 16px; background: var(--color-bg-hover); border-radius: var(--radius-md); }
+    .cs-step-item { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 6px 12px; border-radius: var(--radius-sm); transition: background 0.15s; }
+    .cs-step-item:hover { background: rgba(37,99,235,0.06); }
+    .cs-step-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; border: 2px solid var(--color-border); color: var(--color-text-tertiary); background: var(--color-bg-card); transition: all 0.2s; flex-shrink: 0; }
+    .cs-step-label { font-size: 13px; color: var(--color-text-tertiary); font-weight: 500; transition: color 0.2s; white-space: nowrap; }
+    .cs-step-connector { width: 40px; height: 2px; background: var(--color-border); margin: 0 4px; flex-shrink: 0; border-radius: 1px; transition: background 0.2s; }
+    /* 当前步骤 */
+    .cs-step-item.active .cs-step-num { background: var(--color-primary); border-color: var(--color-primary); color: #fff; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+    .cs-step-item.active .cs-step-label { color: var(--color-primary); font-weight: 600; }
+    /* 已完成步骤 */
+    .cs-step-item.done .cs-step-num { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+    .cs-step-item.done .cs-step-label { color: var(--color-text-secondary); }
+    .cs-step-connector.done { background: var(--color-primary); }
+    /* 步骤提示条 */
+    .cs-step-tip { display: flex; align-items: flex-start; gap: 6px; padding: 8px 12px; margin-bottom: 14px; background: var(--color-primary-bg); border-radius: var(--radius-sm); font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; }
+    .cs-step-tip-icon { flex-shrink: 0; width: 14px; height: 14px; margin-top: 2px; color: var(--color-primary); opacity: 0.7; }
+    .cs-step-tip strong { font-weight: 600; color: var(--color-primary); }
+    /* 区域高亮 */
+    .cs-tuoci-zone.zone-highlight { border-color: var(--color-primary); box-shadow: 0 0 0 2px rgba(37,99,235,0.12); }
+    .cs-tuoci-zone.zone.highlight .cs-tuoci-zone-hd { background: var(--color-primary-bg); }
+    .cs-tuoci-zone.zone.dimmed { opacity: 0.45; }
   `;
   document.head.appendChild(style);
 })();
@@ -954,6 +977,29 @@ window.csInitBatchCategoryChecks = function() {
         <button class="cs-tuoci-close" onclick="csCloseTuociModal()">✕</button>
       </div>
       <div class="cs-tuoci-body">
+        <!-- 步骤条 -->
+        <div class="cs-step-bar" id="csStepBar">
+          <div class="cs-step-item active" data-step="1" onclick="csGoToStep(1)">
+            <div class="cs-step-num">1</div>
+            <div class="cs-step-label">生成分类</div>
+          </div>
+          <div class="cs-step-connector" id="csStepConn1"></div>
+          <div class="cs-step-item" data-step="2" onclick="csGoToStep(2)">
+            <div class="cs-step-num">2</div>
+            <div class="cs-step-label">生成采集问题</div>
+          </div>
+          <div class="cs-step-connector" id="csStepConn2"></div>
+          <div class="cs-step-item" data-step="3" onclick="csGoToStep(3)">
+            <div class="cs-step-num">3</div>
+            <div class="cs-step-label">补充报表问题</div>
+          </div>
+        </div>
+        <!-- 步骤提示 -->
+        <div class="cs-step-tip" id="csStepTip">
+          <svg class="cs-step-tip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <span id="csStepTipText"></span>
+        </div>
+
         <!-- 行业模板 -->
         <div class="cs-template-label"><span class="brand">+ 行业组合模板</span>（点击自动填充示例数据）</div>
         <div class="cs-template-tags" id="csTemplateTags">
@@ -1199,9 +1245,89 @@ function csDeleteAllCategories() {
    拓词工具弹窗逻辑
    ======================================== */
 var csTuociResults = [];
+var csCurrentStep = 1;
 
+/* 步骤配置 */
+var csStepConfig = {
+  1: {
+    tip: '<strong>步骤1</strong> C区填主关键词，D区填后缀，选 C+D 生成后全选，导入分类',
+    highlight: ['C', 'D'],
+    autoCheck: ['C+D']
+  },
+  2: {
+    tip: '<strong>步骤2</strong> E区填后缀，选 C+(D*E) 生成后全选，导入到批量添加',
+    highlight: ['C', 'D', 'E'],
+    autoCheck: ['C+D*E']
+  },
+  3: {
+    tip: '<strong>步骤3</strong> 到报表设置页的拓词弹窗，C/D不变，其他区随意添加，选组合方式生成后导入',
+    highlight: ['A', 'C', 'D', 'E'],
+    autoCheck: ['A+C+D*E']
+  }
+};
+
+/* 切换步骤 */
+function csGoToStep(step) {
+  if (step < 1 || step > 3) return;
+  csCurrentStep = step;
+  
+  /* 更新步骤条状态 */
+  var items = document.querySelectorAll('#csStepBar .cs-step-item');
+  var connectors = document.querySelectorAll('#csStepBar .cs-step-connector');
+  
+  items.forEach(function(item, idx) {
+    var s = idx + 1;
+    item.classList.remove('active', 'done');
+    if (s < step) item.classList.add('done');
+    else if (s === step) item.classList.add('active');
+  });
+  
+  connectors.forEach(function(conn, idx) {
+    conn.classList.remove('done');
+    if (idx + 1 < step) conn.classList.add('done');
+  });
+  
+  /* 更新提示文案 */
+  var tipText = document.getElementById('csStepTipText');
+  if (tipText && csStepConfig[step]) {
+    tipText.innerHTML = csStepConfig[step].tip;
+  }
+  
+  /* 高亮对应区域 */
+  var zones = ['A', 'B', 'C', 'D', 'E', 'F'];
+  var highlightZones = csStepConfig[step] ? csStepConfig[step].highlight : [];
+  
+  zones.forEach(function(z) {
+    var zoneEl = document.querySelector('.cs-tuoci-zone:nth-child(' + (zones.indexOf(z) + 1) + ')');
+    if (zoneEl) {
+      zoneEl.classList.remove('zone-highlight', 'zone-dimmed');
+      if (highlightZones.indexOf(z) !== -1) {
+        zoneEl.classList.add('zone-highlight');
+      } else {
+        zoneEl.classList.add('zone-dimmed');
+      }
+    }
+  });
+  
+  /* 自动勾选推荐的组合方式 */
+  if (csStepConfig[step] && csStepConfig[step].autoCheck) {
+    var combos = csStepConfig[step].autoCheck;
+    document.querySelectorAll('input[name="csCombo"]').forEach(function(cb) {
+      cb.checked = combos.indexOf(cb.value) !== -1;
+    });
+    var allCb = document.getElementById('csComboAll');
+    if (allCb) {
+      var all = document.querySelectorAll('input[name="csCombo"]');
+      var checked = document.querySelectorAll('input[name="csCombo"]:checked');
+      allCb.checked = all.length === checked.length;
+    }
+  }
+}
+
+/* 打开弹窗时初始化步骤条 */
 function csOpenTuociModal() {
   document.getElementById('csTuociModal').classList.add('show');
+  csGoToStep(1);
 }
 
 function csCloseTuociModal() {
