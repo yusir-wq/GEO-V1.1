@@ -250,10 +250,10 @@ function projectRowHtml(p, idx) {
           <button class="btn btn-ghost btn-sm" onclick="pmShowToast('查看项目：${p.name}')">查看</button>
           <button class="btn btn-ghost btn-sm" onclick="openProjectEditModal('${p.id}')">修改</button>
           <div class="pm-action-dropdown" id="pmdd_${p.id}">
-            <button class="btn btn-ghost btn-sm" onclick="pmToggleDropdown('pmdd_${p.id}')">管线 ▾</button>
+            <button class="btn btn-ghost btn-sm" onclick="pmToggleDropdown('pmdd_${p.id}')">更多 ▾</button>
             <div class="pm-dropdown-menu">
               <a onclick="openProjectRenewalModal('${p.id}'); pmCloseAllDropdowns();">续费</a>
-              <a onclick="pmShowToast('设置采集：已跳转到采集设置模块')">设置采集</a>
+              <a onclick="navigateTo('tenant-collection-settings'); pmCloseAllDropdowns();">采集设置</a>
               <a onclick="navigateTo('tenant-report-settings'); pmCloseAllDropdowns();">报表设置</a>
               <a onclick="openProjectShareModal('${p.id}'); pmCloseAllDropdowns();">分享报表</a>
             </div>

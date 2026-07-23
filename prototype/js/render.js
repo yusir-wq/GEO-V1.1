@@ -190,14 +190,20 @@ function renderAdmin(pageId) {
       return renderAdminSaasUsers();
     case 'admin-employees':
       return renderAdminEmployees();
+    case 'admin-roles':
+      return renderAdminRoles();
+    case 'admin-media':
+      return renderAdminMedia();
     case 'admin-finance':
       return renderFinance('admin');
-    case 'admin-announcements':
-      return renderAdminAnnouncements();
-    case 'admin-analytics':
-      return renderAdminAnalytics();
     case 'admin-settings':
       return renderAdminSettings();
+    case 'admin-announcements':
+      return renderAdminAnnouncements();
+    case 'admin-logs':
+      return renderAdminLogs();
+    case 'admin-account':
+      return renderAdminAccount();
     case 'admin-sitefarm-templates':
       return renderAdminSitefarmTemplates();
     case 'admin-tdk-variables':
@@ -473,38 +479,46 @@ function renderTenant(pageId) {
         { title: '订单趋势', subtitle: '近6个月订单数据', icon: '📈', placeholder: '折线图 - 订单趋势' },
         { title: '套餐销售分布', subtitle: '各套餐销售占比', icon: '🍩', placeholder: '饼图 - 套餐分布' }
       ]);
+    case 'tenant-projects':
+      return renderTenantProjects();
+    case 'tenant-customers':
+      return renderTenantCustomers();
     case 'tenant-agents':
       return renderTenantAgents();
     case 'tenant-products':
       return renderTenantProducts();
-    case 'tenant-orders':
-      return renderTenantOrders();
-    case 'tenant-customers':
-      return renderTenantCustomers();
-    case 'tenant-projects':
-      return renderTenantProjects();
-    case 'tenant-report-settings':
-      return renderReportSettings();
-    case 'tenant-knowledge':
-      return renderTenantKnowledge();
     case 'tenant-ai-article':
       return renderTenantAiArticle();
+    case 'tenant-geo-articles':
+      return renderTenantGeoArticles();
+    case 'tenant-knowledge':
+      return renderTenantKnowledge();
     case 'tenant-media':
       return renderTenantMedia();
+    case 'tenant-reports':
+      return renderTenantReports();
     case 'tenant-crawl':
       return renderTenantCrawl();
+    case 'tenant-cases':
+      return renderTenantCases();
     case 'tenant-finance':
       return renderFinance('tenant');
     case 'tenant-employees':
       return renderTenantEmployees();
-    case 'tenant-announcements':
-      return renderTenantAnnouncements();
-    case 'tenant-logs':
-      return renderTenantLogs();
-    case 'tenant-reports':
-      return renderTenantReports();
     case 'tenant-settings':
       return renderTenantSettings();
+    case 'tenant-announcements':
+      return renderTenantAnnouncements();
+    case 'tenant-messages':
+      return renderTenantMessages();
+    case 'tenant-logs':
+      return renderTenantLogs();
+    case 'tenant-account':
+      return renderTenantAccount();
+    case 'tenant-report-settings':
+      return renderReportSettings();
+    case 'tenant-collection-settings':
+      return renderTenantCollectionSettings();
     case 'tenant-sitefarm-profiles':
       return renderTenantSitefarmProfiles();
     case 'tenant-sitefarm-templates':
@@ -515,8 +529,6 @@ function renderTenant(pageId) {
       return renderTenantTdkTemplates();
     case 'tenant-kuaitong':
       return renderTenantKuaitong();
-    case 'tenant-geo-articles':
-      return renderTenantGeoArticles();
     default:
       return H.pageHeader('页面未找到', '该页面不存在');
   }
@@ -1468,24 +1480,32 @@ function renderAgent(pageId) {
         { title: '收益趋势', subtitle: '近6个月收益数据', icon: '📈', placeholder: '折线图 - 收益趋势' },
         { title: '客户行业分布', subtitle: '各行业客户占比', icon: '🍩', placeholder: '饼图 - 行业分布' }
       ]);
-    case 'agent-products':
-      return renderAgentProducts();
+    case 'agent-projects':
+      return renderAgentProjects();
     case 'agent-customers':
       return renderAgentCustomers();
     case 'agent-sub-agents':
       return renderAgentSubAgents();
-    case 'agent-contracts':
-      return renderAgentContracts();
-    case 'agent-orders':
-      return renderAgentOrders();
-    case 'agent-revenue':
-      return renderAgentRevenue();
+    case 'agent-products':
+      return renderAgentProducts();
+    case 'agent-reports':
+      return renderAgentReports();
+    case 'agent-cases':
+      return renderAgentCases();
+    case 'agent-finance':
+      return renderFinance('agent');
     case 'agent-employees':
       return renderAgentEmployees();
-    case 'agent-logs':
-      return renderAgentLogs();
     case 'agent-settings':
       return renderAgentSettings();
+    case 'agent-announcements':
+      return renderAgentAnnouncements();
+    case 'agent-messages':
+      return renderAgentMessages();
+    case 'agent-logs':
+      return renderAgentLogs();
+    case 'agent-account':
+      return renderAgentAccount();
     default:
       return H.pageHeader('页面未找到', '该页面不存在');
   }
@@ -1750,24 +1770,20 @@ function renderEndUser(pageId) {
   switch (pageId) {
     case 'enduser-dashboard':
       return renderEndUserDashboard();
-    case 'enduser-packages':
-      return renderEndUserPackages();
-    case 'enduser-geo-report':
-      return renderEndUserGeoReport();
-    case 'enduser-deliverables':
-      return renderEndUserDeliverables();
-    case 'enduser-knowledge':
-      return renderEndUserKnowledge();
+    case 'enduser-projects':
+      return renderEndUserProjects();
+    case 'enduser-reports':
+      return renderEndUserReports();
+    case 'enduser-knowledge-intro':
+      return renderEndUserKnowledgeIntro();
+    case 'enduser-knowledge-album':
+      return renderEndUserKnowledgeAlbum();
     case 'enduser-finance':
       return renderFinance('enduser');
-    case 'enduser-settings':
-      return renderEndUserSettings();
-    case 'enduser-sitefarm-profile':
-      return renderEndUserSitefarmProfile();
-    case 'enduser-kuaitong':
-      return renderEndUserKuaitong();
-    case 'enduser-geo-articles':
-      return renderEndUserGeoArticles();
+    case 'enduser-messages':
+      return renderEndUserMessages();
+    case 'enduser-account':
+      return renderEndUserAccount();
     default:
       return H.pageHeader('页面未找到', '该页面不存在');
   }
@@ -1953,4 +1969,374 @@ function renderEndUserSettings() {
       { id: 'security', label: '安全设置' },
       { id: 'notification', label: '通知偏好' }
     ], tabsContent);
+}
+
+/* ========================================
+   新增占位渲染函数 — 菜单调整后补充
+   ======================================== */
+
+/* --- 超管 - 角色管理 --- */
+function renderAdminRoles() {
+  return H.pageHeader('角色管理', '配置平台角色模板与权限组合',
+    '<button class="btn btn-primary">+ 新增角色</button>'
+  ) +
+    H.table({
+      title: '角色列表',
+      count: 6,
+      columns: [
+        { key: 'name', label: '角色名称' },
+        { key: 'desc', label: '描述' },
+        { key: 'modules', label: '包含模块' },
+        { key: 'users', label: '关联用户数' },
+        { key: 'actions', label: '操作', render: () =>
+          '<div class="table-actions"><button class="btn btn-ghost btn-sm">编辑</button><button class="btn btn-ghost btn-sm text-danger">删除</button></div>'
+        }
+      ],
+      rows: [
+        { name: '超级管理员', desc: '拥有全部权限', modules: '全部', users: '2' },
+        { name: '运营主管', desc: '负责日常运营管理', modules: 'SAAS用户、财务流水、消息公告', users: '3' },
+        { name: '技术支持', desc: '负责系统配置与维护', modules: '系统设置、系统日志', users: '5' }
+      ]
+    });
+}
+
+/* --- 超管 - 官媒投稿 --- */
+function renderAdminMedia() {
+  return H.pageHeader('官媒投稿', '管理上游媒体资源与投稿财务流水') +
+    H.tabRow([
+      { id: 'media-list', label: '官媒列表', active: true },
+      { id: 'media-finance', label: '投稿财务流水' }
+    ], `
+    <div class="table-toolbar">
+      <div class="table-toolbar-left"><span class="table-toolbar-title">官媒列表</span><span class="table-toolbar-count">共 320 家</span></div>
+      <div class="table-toolbar-right"><div class="table-search"><span class="table-search-icon">${uiIcon('search','search')}</span><input type="text" placeholder="搜索媒体名称..."></div><button class="btn btn-primary">+ 添加官媒</button></div>
+    </div>
+    <table class="data-table"><thead><tr><th>媒体名称</th><th>分类</th><th>售价</th><th>状态</th><th>操作</th></tr></thead><tbody>
+      <tr><td>新华网</td><td>官方媒体</td><td>¥500/篇</td><td><span class="badge badge-success">启用</span></td><td><div class="table-actions"><button class="btn btn-ghost btn-sm">编辑</button></div></td></tr>
+      <tr><td>人民网</td><td>官方媒体</td><td>¥480/篇</td><td><span class="badge badge-success">启用</span></td><td><div class="table-actions"><button class="btn btn-ghost btn-sm">编辑</button></div></td></tr>
+      <tr><td>中国日报</td><td>行业媒体</td><td>¥350/篇</td><td><span class="badge badge-success">启用</span></td><td><div class="table-actions"><button class="btn btn-ghost btn-sm">编辑</button></div></td></tr>
+    </tbody></table>`);
+}
+
+/* --- 超管 - 系统日志 --- */
+function renderAdminLogs() {
+  return H.pageHeader('系统日志', '全平台操作审计日志') +
+    H.table({
+      title: '操作日志',
+      count: 8562,
+      columns: [
+        { key: 'time', label: '操作时间' },
+        { key: 'user', label: '操作人' },
+        { key: 'action', label: '操作类型' },
+        { key: 'module', label: '模块' },
+        { key: 'detail', label: '详情' },
+        { key: 'ip', label: 'IP地址' }
+      ],
+      rows: [
+        { time: '2026-07-22 14:32:18', user: '超级管理员', action: '创建', module: 'SAAS用户', detail: '创建租户「杭州星辰科技」', ip: '192.168.1.100' },
+        { time: '2026-07-22 13:15:42', user: '运营主管', action: '充值', module: '财务流水', detail: '为租户「上海云帆」充值 ¥50,000', ip: '192.168.1.101' },
+        { time: '2026-07-22 11:08:55', user: '技术支持', action: '修改', module: '系统设置', detail: '更新官媒平台接入配置', ip: '192.168.1.102' }
+      ]
+    });
+}
+
+/* --- 超管 - 账号设置 --- */
+function renderAdminAccount() {
+  return H.pageHeader('账号设置', '管理超管账号基础信息') +
+    `<div class="card" style="max-width:600px">
+      <div class="form">
+        <div class="form-group"><label class="form-label">用户名</label><input type="text" class="form-input" value="admin" disabled /></div>
+        <div class="form-group"><label class="form-label">姓名</label><input type="text" class="form-input" value="超级管理员" /></div>
+        <div class="form-group"><label class="form-label">联系电话</label><input type="text" class="form-input" value="138****0000" /></div>
+        <div class="form-group"><label class="form-label">邮箱</label><input type="email" class="form-input" value="admin@geo-saas.com" /></div>
+        <div class="form-actions"><button class="btn btn-primary">保存修改</button></div>
+      </div>
+    </div>`;
+}
+
+/* --- 租户 - 案例库 --- */
+function renderTenantCases() {
+  return H.pageHeader('案例库', '标杆案例展示与效果数据') +
+    H.stats([
+      { label: '总案例数', value: '36', change: '', icon: '📁', color: 'blue' },
+      { label: '本月新增', value: '4', change: '', icon: '📈', color: 'green' },
+      { label: '平均覆盖平台', value: '6.2个', change: '', icon: '🌐', color: 'purple' }
+    ]) +
+    H.table({
+      title: '案例列表',
+      count: 36,
+      columns: [
+        { key: 'name', label: '案例名称' },
+        { key: 'client', label: '客户' },
+        { key: 'platforms', label: '覆盖平台' },
+        { key: 'keywords', label: '关键词数' },
+        { key: 'date', label: '创建时间' },
+        { key: 'actions', label: '操作', render: () =>
+          '<div class="table-actions"><button class="btn btn-ghost btn-sm">查看</button><button class="btn btn-ghost btn-sm">分享</button></div>'
+        }
+      ],
+      rows: [
+        { name: '防黄剂行业GEO优化案例', client: '温州天宇贸易', platforms: '6个', keywords: '25', date: '2026-07-15' },
+        { name: '物流行业品牌曝光提升', client: '宁波海港物流', platforms: '8个', keywords: '32', date: '2026-07-10' },
+        { name: '科技企业AI搜索优化', client: '杭州星辰科技', platforms: '7个', keywords: '18', date: '2026-07-05' }
+      ]
+    });
+}
+
+/* --- 租户 - 系统消息 --- */
+function renderTenantMessages() {
+  return H.pageHeader('系统消息', '业务事件通知') +
+    `<div class="message-list">
+      <div class="message-item unread"><div class="message-item-header"><span class="badge badge-primary">提单</span><span class="message-time">2026-07-22 14:30</span></div><div class="message-item-body">客户「温州天宇贸易」的提单已被拒绝，原因：关键词不符合规范</div></div>
+      <div class="message-item unread"><div class="message-item-header"><span class="badge badge-warning">到期</span><span class="message-time">2026-07-22 10:00</span></div><div class="message-item-body">客户「宁波海港物流」的项目将于7天后到期，请及时跟进续费</div></div>
+      <div class="message-item"><div class="message-item-header"><span class="badge badge-success">充值</span><span class="message-time">2026-07-21 16:45</span></div><div class="message-item-body">代理商「杭州分部」充值成功，金额 ¥20,000</div></div>
+      <div class="message-item"><div class="message-item-header"><span class="badge badge-primary">投稿</span><span class="message-time">2026-07-21 09:20</span></div><div class="message-item-body">批量投稿任务已完成，共投稿 15 篇文章至 8 家官媒</div></div>
+    </div>`;
+}
+
+/* --- 租户 - 账号设置 --- */
+function renderTenantAccount() {
+  return H.pageHeader('账号设置', '基础信息、实名认证与权益功能') +
+    H.tabRow([
+      { id: 'profile', label: '基本信息', active: true },
+      { id: 'auth', label: '实名认证' },
+      { id: 'rights', label: '权益功能' }
+    ], `
+    <div class="form" style="max-width:600px">
+      <div class="form-group"><label class="form-label">企业名称 <span class="required">*</span></label><input type="text" class="form-input" value="杭州星辰科技有限公司" /></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">联系人</label><input type="text" class="form-input" value="张经理" /></div>
+        <div class="form-group"><label class="form-label">联系电话</label><input type="text" class="form-input" value="138****5678" /></div>
+      </div>
+      <div class="form-group"><label class="form-label">联系邮箱</label><input type="email" class="form-input" value="zhang@startech.com" /></div>
+      <div class="form-actions"><button class="btn btn-primary">保存修改</button><button class="btn btn-secondary">取消</button></div>
+    </div>`);
+}
+
+/* --- 代理商 - 项目管理 --- */
+function renderAgentProjects() {
+  return H.pageHeader('项目管理', '管理本代理下的客户项目',
+    '<button class="btn btn-primary">+ 新建项目</button>'
+  ) +
+    H.table({
+      title: '项目列表',
+      count: 42,
+      columns: [
+        { key: 'id', label: '项目ID' },
+        { key: 'client', label: '客户' },
+        { key: 'product', label: '产品' },
+        { key: 'keywords', label: '关键词数' },
+        { key: 'status', label: '状态', render: (val) => `<span class="badge badge-${val === '生效中' ? 'success' : val === '已过期' ? 'danger' : 'warning'}">${val}</span>` },
+        { key: 'expire', label: '到期时间' },
+        { key: 'actions', label: '操作', render: () =>
+          '<div class="table-actions"><button class="btn btn-ghost btn-sm">查看</button><button class="btn btn-ghost btn-sm">续费</button></div>'
+        }
+      ],
+      rows: [
+        { id: 'P20260701', client: '杭州星辰科技', product: 'GEO标准套餐', keywords: '20', status: '生效中', expire: '2027-01-01' },
+        { id: 'P20260615', client: '温州天宇贸易', product: 'GEO基础套餐', keywords: '10', status: '生效中', expire: '2026-12-15' },
+        { id: 'P20260520', client: '宁波海港物流', product: 'GEO旗舰套餐', keywords: '35', status: '即将到期', expire: '2026-07-29' }
+      ]
+    });
+}
+
+/* --- 代理商 - 效果报表 --- */
+function renderAgentReports() {
+  return H.pageHeader('效果报表', '查看客户项目效果数据') +
+    `<div class="filter-bar" style="display:flex;gap:12px;margin-bottom:16px">
+      <input type="text" class="form-input" placeholder="输入项目ID查询" style="width:240px" />
+      <select class="form-input" style="width:160px"><option>全部平台</option><option>百度文心</option><option>DeepSeek</option><option>豆包</option></select>
+      <button class="btn btn-primary">查询</button>
+    </div>` +
+    H.table({
+      title: '效果数据',
+      count: 156,
+      columns: [
+        { key: 'keyword', label: '训练词' },
+        { key: 'question', label: '问题' },
+        { key: 'platform', label: '平台' },
+        { key: 'source', label: '来源' },
+        { key: 'date', label: '采集时间' }
+      ],
+      rows: [
+        { keyword: '防黄剂厂家', question: '防黄剂厂家哪家好', platform: '百度文心', source: '官媒投稿', date: '2026-07-22' },
+        { keyword: '防黄剂工厂', question: '推荐防黄剂工厂', platform: 'DeepSeek', source: '官媒投稿', date: '2026-07-22' },
+        { keyword: '防黄剂公司', question: '防黄剂公司排名', platform: '豆包', source: '官媒投稿', date: '2026-07-21' }
+      ]
+    });
+}
+
+/* --- 代理商 - 案例库 --- */
+function renderAgentCases() {
+  return H.pageHeader('案例库', '参考标杆案例') +
+    H.table({
+      title: '案例列表',
+      count: 12,
+      columns: [
+        { key: 'name', label: '案例名称' },
+        { key: 'industry', label: '行业' },
+        { key: 'platforms', label: '覆盖平台' },
+        { key: 'keywords', label: '关键词数' },
+        { key: 'actions', label: '操作', render: () =>
+          '<div class="table-actions"><button class="btn btn-ghost btn-sm">查看</button></div>'
+        }
+      ],
+      rows: [
+        { name: '防黄剂行业GEO优化案例', industry: '化工', platforms: '6个', keywords: '25' },
+        { name: '物流行业品牌曝光提升', industry: '物流', platforms: '8个', keywords: '32' },
+        { name: '科技企业AI搜索优化', industry: '科技', platforms: '7个', keywords: '18' }
+      ]
+    });
+}
+
+/* --- 代理商 - 消息公告 --- */
+function renderAgentAnnouncements() {
+  return H.pageHeader('消息公告', '接收上级公告通知') +
+    `<div class="message-list">
+      <div class="message-item unread"><div class="message-item-header"><span class="badge badge-primary">公告</span><span class="message-time">2026-07-20 09:00</span></div><div class="message-item-body">系统将于7月25日凌晨2:00-4:00进行升级维护，届时部分功能可能暂时不可用</div></div>
+      <div class="message-item"><div class="message-item-header"><span class="badge badge-primary">公告</span><span class="message-time">2026-07-15 10:30</span></div><div class="message-item-body">新增Kimi平台效果采集功能已上线，欢迎使用</div></div>
+    </div>`;
+}
+
+/* --- 代理商 - 系统消息 --- */
+function renderAgentMessages() {
+  return H.pageHeader('系统消息', '业务事件通知') +
+    `<div class="message-list">
+      <div class="message-item unread"><div class="message-item-header"><span class="badge badge-warning">到期</span><span class="message-time">2026-07-22 10:00</span></div><div class="message-item-body">客户「宁波海港物流」的项目将于7天后到期</div></div>
+      <div class="message-item"><div class="message-item-header"><span class="badge badge-success">充值</span><span class="message-time">2026-07-21 16:45</span></div><div class="message-item-body">您的账户充值成功，金额 ¥10,000</div></div>
+    </div>`;
+}
+
+/* --- 代理商 - 账号设置 --- */
+function renderAgentAccount() {
+  return H.pageHeader('账号设置', '基础信息管理') +
+    `<div class="card" style="max-width:600px">
+      <div class="form">
+        <div class="form-group"><label class="form-label">代理商名称</label><input type="text" class="form-input" value="杭州分部" /></div>
+        <div class="form-group"><label class="form-label">联系人</label><input type="text" class="form-input" value="李总" /></div>
+        <div class="form-group"><label class="form-label">联系电话</label><input type="text" class="form-input" value="139****1234" /></div>
+        <div class="form-group"><label class="form-label">联系邮箱</label><input type="email" class="form-input" value="li@agent.com" /></div>
+        <div class="form-actions"><button class="btn btn-primary">保存修改</button></div>
+      </div>
+    </div>`;
+}
+
+/* --- 终端用户 - 我的项目 --- */
+function renderEndUserProjects() {
+  return H.pageHeader('我的项目', '查看已购买的GEO项目详情') +
+    `<div class="card-grid" style="grid-template-columns: repeat(2, 1fr)">
+      <div class="card-item" style="border: 2px solid var(--color-primary)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <span class="badge badge-success badge-dot">生效中</span>
+          <span style="font-size:12px;color:#94A3B8">P20260701</span>
+        </div>
+        <div class="card-item-title">GEO标准套餐</div>
+        <div class="card-item-desc">多平台GEO优化与监测</div>
+        <div style="margin:12px 0;padding:12px;background:#F8FAFC;border-radius:8px;font-size:13px;color:#475569">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>关键词数</span><span style="font-weight:500">20个</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>覆盖平台</span><span style="font-weight:500">6个</span></div>
+          <div style="display:flex;justify-content:space-between"><span>有效期至</span><span style="font-weight:500">2027-01-01</span></div>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="width:100%">查看详情</button>
+      </div>
+    </div>`;
+}
+
+/* --- 终端用户 - 效果报表 --- */
+function renderEndUserReports() {
+  return H.pageHeader('效果报表', '按项目ID查询关键词在AI平台的效果数据') +
+    `<div class="filter-bar" style="display:flex;gap:12px;margin-bottom:16px">
+      <input type="text" class="form-input" placeholder="输入项目ID查询" style="width:240px" />
+      <select class="form-input" style="width:160px"><option>全部平台</option><option>百度文心</option><option>DeepSeek</option><option>豆包</option></select>
+      <button class="btn btn-primary">查询</button>
+    </div>` +
+    H.table({
+      title: '效果数据',
+      count: 86,
+      columns: [
+        { key: 'keyword', label: '训练词' },
+        { key: 'question', label: '问题' },
+        { key: 'platform', label: '平台' },
+        { key: 'source', label: '来源' },
+        { key: 'date', label: '采集时间' }
+      ],
+      rows: [
+        { keyword: '防黄剂厂家', question: '防黄剂厂家哪家好', platform: '百度文心', source: '官媒投稿', date: '2026-07-22' },
+        { keyword: '防黄剂工厂', question: '推荐防黄剂工厂', platform: 'DeepSeek', source: '官媒投稿', date: '2026-07-22' },
+        { keyword: '防黄剂公司', question: '防黄剂公司排名', platform: '豆包', source: '官媒投稿', date: '2026-07-21' }
+      ]
+    });
+}
+
+/* --- 终端用户 - 企业介绍 --- */
+function renderEndUserKnowledgeIntro() {
+  return H.pageHeader('企业介绍', '管理企业文字资料，供AI文章生成引用',
+    '<button class="btn btn-primary">+ 新增资料</button>'
+  ) +
+    H.table({
+      title: '企业资料',
+      count: 5,
+      columns: [
+        { key: 'title', label: '资料标题' },
+        { key: 'category', label: '分类' },
+        { key: 'words', label: '字数' },
+        { key: 'date', label: '更新时间' },
+        { key: 'actions', label: '操作', render: () =>
+          '<div class="table-actions"><button class="btn btn-ghost btn-sm">编辑</button><button class="btn btn-ghost btn-sm text-danger">删除</button></div>'
+        }
+      ],
+      rows: [
+        { title: '公司简介', category: '企业概况', words: '1,200', date: '2026-07-15' },
+        { title: '核心产品介绍', category: '产品资料', words: '2,500', date: '2026-07-10' },
+        { title: '企业资质与荣誉', category: '资质证明', words: '800', date: '2026-06-28' }
+      ]
+    });
+}
+
+/* --- 终端用户 - 企业相册 --- */
+function renderEndUserKnowledgeAlbum() {
+  return H.pageHeader('企业相册', '管理产品图片相册，供AI文章生成引用',
+    '<button class="btn btn-primary">+ 上传图片</button>'
+  ) +
+    `<div class="card-grid" style="grid-template-columns: repeat(4, 1fr)">
+      <div class="card-item" style="text-align:center;padding:16px">
+        <div style="width:100%;height:120px;background:#F1F5F9;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#94A3B8;font-size:24px">🖼️</div>
+        <div style="margin-top:8px;font-size:13px;color:#475569">产品图1</div>
+      </div>
+      <div class="card-item" style="text-align:center;padding:16px">
+        <div style="width:100%;height:120px;background:#F1F5F9;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#94A3B8;font-size:24px">🖼️</div>
+        <div style="margin-top:8px;font-size:13px;color:#475569">产品图2</div>
+      </div>
+      <div class="card-item" style="text-align:center;padding:16px">
+        <div style="width:100%;height:120px;background:#F1F5F9;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#94A3B8;font-size:24px">🖼️</div>
+        <div style="margin-top:8px;font-size:13px;color:#475569">工厂照片</div>
+      </div>
+    </div>`;
+}
+
+/* --- 终端用户 - 系统消息 --- */
+function renderEndUserMessages() {
+  return H.pageHeader('系统消息', '业务通知') +
+    `<div class="message-list">
+      <div class="message-item unread"><div class="message-item-header"><span class="badge badge-success">项目</span><span class="message-time">2026-07-22 10:00</span></div><div class="message-item-body">您的项目 P20260701 已成功创建，预计3个工作日内开始采集数据</div></div>
+      <div class="message-item"><div class="message-item-header"><span class="badge badge-primary">效果</span><span class="message-time">2026-07-20 09:30</span></div><div class="message-item-body">您有3个关键词排名上升，请查看效果报表</div></div>
+    </div>`;
+}
+
+/* --- 终端用户 - 账号设置 --- */
+function renderEndUserAccount() {
+  return H.pageHeader('账号设置', '基础信息与实名认证') +
+    H.tabRow([
+      { id: 'profile', label: '基本信息', active: true },
+      { id: 'auth', label: '实名认证' }
+    ], `
+    <div class="form" style="max-width:600px">
+      <div class="form-group"><label class="form-label">企业名称 <span class="required">*</span></label><input type="text" class="form-input" value="杭州星辰科技有限公司" /></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">联系人</label><input type="text" class="form-input" value="王女士" /></div>
+        <div class="form-group"><label class="form-label">联系电话</label><input type="text" class="form-input" value="137****5678" /></div>
+      </div>
+      <div class="form-group"><label class="form-label">联系邮箱</label><input type="email" class="form-input" value="wang@startech.com" /></div>
+      <div class="form-actions"><button class="btn btn-primary">保存修改</button><button class="btn btn-secondary">取消</button></div>
+    </div>`);
 }

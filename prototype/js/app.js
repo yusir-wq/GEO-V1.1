@@ -59,7 +59,13 @@ const ICON_MAP = {
   'clock': lucideIcon('<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'),
   'chevron-down': lucideIcon('<path d="m6 9 6 6 6-6"/>'),
   'plus': lucideIcon('<path d="M5 12h14"/><path d="M12 5v14"/>'),
-  'image': lucideIcon('<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>')
+  'image': lucideIcon('<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>'),
+  'save': lucideIcon('<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>'),
+  'zap': lucideIcon('<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>'),
+  'copy': lucideIcon('<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>'),
+  'edit': lucideIcon('<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>'),
+  'tag': lucideIcon('<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>'),
+  'trash': lucideIcon('<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>')
 };
 
 window.getLucideIcon = function(name, fallback = 'file-text') {
@@ -174,6 +180,11 @@ function navigateTo(pageId) {
     initCharts();
     // 滚动到顶部
     content.scrollTop = 0;
+    
+    // 触发页面特定初始化函数
+    if (typeof window.csInitBatchCategoryChecks === 'function') {
+      setTimeout(() => window.csInitBatchCategoryChecks(), 100);
+    }
   }
 
   // 关闭端口下拉菜单
@@ -209,6 +220,11 @@ function switchPort(port) {
     content.innerHTML = renderContent(currentPort, currentPage);
     initCharts();
     content.scrollTop = 0;
+    
+    // 触发页面特定初始化函数
+    if (typeof window.csInitBatchCategoryChecks === 'function') {
+      setTimeout(() => window.csInitBatchCategoryChecks(), 100);
+    }
   }
 
   // 关闭端口下拉菜单
@@ -514,6 +530,11 @@ function init() {
   if (content) {
     content.innerHTML = renderContent(currentPort, currentPage);
     initCharts();
+    
+    // 触发页面特定初始化函数
+    if (typeof window.csInitBatchCategoryChecks === 'function') {
+      setTimeout(() => window.csInitBatchCategoryChecks(), 100);
+    }
   }
 
   // 键盘事件：ESC关闭模态框
