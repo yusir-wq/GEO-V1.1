@@ -143,6 +143,7 @@
     .am-batch-rule-row .rule-sep { color: var(--color-text-secondary); flex-shrink: 0; }
     .am-batch-rule-row .radio-group {
       display: inline-flex !important;
+      flex-direction: row !important;
       align-items: center !important;
       gap: 4px !important;
       flex-shrink: 0 !important;
