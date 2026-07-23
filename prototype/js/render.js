@@ -193,7 +193,7 @@ function renderAdmin(pageId) {
     case 'admin-roles':
       return renderAdminRoles();
     case 'admin-media':
-      return renderAdminMedia();
+      return window.renderAdminMedia ? window.renderAdminMedia() : renderAdminMediaFallback();
     case 'admin-finance':
       return renderFinance('admin');
     case 'admin-settings':

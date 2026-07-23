@@ -16,7 +16,7 @@
     .cs-page-subtitle { font-size: 13px; color: var(--color-text-tertiary); }
     
     .cs-card { background: var(--color-bg-card); border-radius: var(--radius-md); padding: 16px 20px; margin-bottom: 12px; border: 1px solid var(--color-border); }
-    .cs-card-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--color-border-light); color: var(--color-text-primary); }
+    .cs-card-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; color: var(--color-text-primary); }
     
     .cs-order-info-row { display: flex; align-items: center; gap: 24px; line-height: 1; flex-wrap: wrap; }
     .cs-order-info-row + .cs-order-info-row { margin-top: 8px; }
@@ -33,7 +33,7 @@
     .cs-add-section-left { flex: 1; }
     .cs-add-section-right { width: 220px; flex-shrink: 0; }
     
-    .cs-textarea-box { width: 100%; min-height: 140px; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 10px 12px; font-size: 13px; line-height: 1.6; resize: vertical; outline: none; font-family: inherit; background: var(--color-bg-card); color: var(--color-text-primary); transition: border-color 0.2s; }
+    .cs-textarea-box { width: 100%; min-height: 140px; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 10px 12px; font-size: 13px; line-height: 1.6; resize: vertical; outline: none; font-family: inherit; background: #F4F9FF; color: var(--color-text-primary); transition: border-color 0.2s; }
     .cs-textarea-box:focus { border-color: var(--color-primary); }
     
     .cs-section-label { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 8px; }
@@ -53,12 +53,12 @@
     .cs-platform-table td { padding: 10px 12px; border-bottom: 1px solid var(--color-border-light); color: var(--color-text-primary); }
     .cs-platform-table tr:hover { background: var(--color-bg-hover); }
     
-    .cs-num-input { width: 60px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 5px 8px; font-size: 13px; text-align: center; outline: none; background: var(--color-bg-card); }
+    .cs-num-input { width: 60px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 5px 8px; font-size: 13px; text-align: center; outline: none; background: #F4F9FF; }
     .cs-num-input:focus { border-color: var(--color-primary); }
     
     .cs-filter-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
     .cs-filter-select { position: relative; display: inline-block; }
-    .cs-filter-select-btn { display: flex; align-items: center; gap: 6px; padding: 0 12px; height: 36px; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 13px; background: var(--color-bg-card); cursor: pointer; color: var(--color-text-secondary); min-width: 120px; transition: all 0.15s; }
+    .cs-filter-select-btn { display: flex; align-items: center; gap: 6px; padding: 0 12px; height: 36px; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 13px; background: #F4F9FF; cursor: pointer; color: var(--color-text-secondary); min-width: 120px; transition: all 0.15s; }
     .cs-filter-select-btn:hover { border-color: var(--color-primary); color: var(--color-primary); }
     .cs-filter-select-btn .arrow { margin-left: auto; font-size: 10px; color: var(--color-text-tertiary); }
     .cs-filter-dropdown { position: absolute; top: calc(100% + 4px); left: 0; z-index: 200; background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); padding: 6px; min-width: 160px; animation: fadeIn 0.15s ease; display: none; }
@@ -66,7 +66,7 @@
     .cs-filter-dropdown-item { display: flex; align-items: center; padding: 8px 12px; border-radius: var(--radius-md); cursor: pointer; transition: all 0.15s ease; font-size: 13px; color: var(--color-text-primary); }
     .cs-filter-dropdown-item:hover { background: var(--color-border-light); }
     .cs-filter-dropdown-item.active { background: var(--color-primary-bg); color: var(--color-primary); }
-    .cs-filter-input { border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 0 10px; height: 36px; font-size: 13px; outline: none; width: 200px; background: var(--color-bg-card); color: var(--color-text-primary); }
+    .cs-filter-input { border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 0 10px; height: 36px; font-size: 13px; outline: none; width: 200px; background: #F4F9FF; color: var(--color-text-primary); }
     .cs-filter-input:focus { border-color: var(--color-primary); }
     
     /* 拓词工具弹窗按钮 - 右上角定位 */
@@ -253,9 +253,7 @@ function renderTenantCollectionSettings() {
         <!-- 右侧：需要命中的关键词 -->
         <div class="cs-card" style="margin-bottom: 0; display: flex; flex-direction: column;">
           <div class="cs-card-title">需要命中的关键词</div>
-          <div style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px; flex: 1; background: var(--color-bg-card); font-size: 13px; color: var(--color-text-primary);">
-            <span>蓝王科技</span>
-          </div>
+          <textarea class="cs-textarea-box" style="min-height: auto; flex: 1; background: #F4F9FF;" placeholder="输入关键词，用逗号分隔">蓝王科技</textarea>
         </div>
       </div>
     </div>
@@ -346,9 +344,9 @@ function renderTenantCollectionSettings() {
         <div style="display: flex; align-items: center; gap: 12px;">
           <span style="font-size: 13px; color: var(--color-text-tertiary); min-width: 80px;">执行周期</span>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <input type="date" style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 6px 10px; font-size: 13px; outline: none; background: var(--color-bg-card); color: var(--color-text-primary);" value="2026-06-24" />
+            <input type="date" style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 6px 10px; font-size: 13px; outline: none; background: #F4F9FF; color: var(--color-text-primary);" value="2026-06-24" />
             <span style="color: var(--color-text-tertiary);">至</span>
-            <input type="date" style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 6px 10px; font-size: 13px; outline: none; background: var(--color-bg-card); color: var(--color-text-primary);" value="2026-07-24" />
+            <input type="date" style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 6px 10px; font-size: 13px; outline: none; background: #F4F9FF; color: var(--color-text-primary);" value="2026-07-24" />
           </div>
         </div>
       </div>
@@ -407,7 +405,7 @@ function renderTenantCollectionSettings() {
 
     <!-- 保存按钮 -->
     <div class="cs-sticky-save-bar">
-      <button class="btn btn-secondary" onclick="csShowToast('已放弃所有未保存更改')">取消</button>
+      <button class="btn btn-secondary" onclick="navigateTo('tenant-projects')">取消</button>
       <button class="btn btn-primary" onclick="csShowToast('配置已保存')">
         ${ICON_MAP['save']}
         保存配置
@@ -442,6 +440,7 @@ function csBatchAddProblems() {
   // 解析输入的问题（每行一个，格式：问题；分类）
   const lines = text.split('\n').filter(line => line.trim());
   const newProblems = [];
+  const newCategories = new Set(); // 使用 Set 确保唯一性
   
   lines.forEach(line => {
     const parts = line.split('；');
@@ -457,12 +456,27 @@ function csBatchAddProblems() {
         _selected: false,
         _editingCat: false
       });
+      
+      // 如果有分类且不存在，则添加到 Set
+      if (category && !csCategories.some(c => c.name === category)) {
+        newCategories.add(category);
+      }
     }
   });
   
   if (newProblems.length === 0) {
     csShowToast('未找到有效的问题');
     return;
+  }
+  
+  // 添加新分类到分类列表
+  if (newCategories.size > 0) {
+    newCategories.forEach(catName => {
+      csCategories.push({ name: catName });
+    });
+    csSyncBatchCategoryChecks();
+    csUpdateProblemCategoryFilter();
+    csShowToast(`已添加 ${newCategories.size} 个新分类`);
   }
   
   // 添加到全局问题列表
@@ -1408,6 +1422,27 @@ function csCopyAllTuoci() {
 function csImportTuociResults() {
   var selected = csTuociResults.filter(function(p) { return p._selected; });
   if (!selected.length) { csShowToast('请先选择要导入的问题'); return; }
+
+  /* 根据当前页面决定导入目标 */
+  if (typeof currentPage !== 'undefined' && currentPage === 'tenant-report-settings') {
+    /* 导入到报表设置页面的批量添加框，带上分类 */
+    var rsTextarea = document.getElementById('rsQuestionInput');
+    if (rsTextarea) {
+      var rsExisting = rsTextarea.value.trim();
+      var rsNewText = selected.map(function(p) {
+        var cat = p._category ? '；' + p._category : '';
+        return p.text + cat;
+      }).join('\n');
+      rsTextarea.value = rsExisting ? rsExisting + '\n' + rsNewText : rsNewText;
+    }
+    csCloseTuociModal();
+    if (typeof rsShowToast === 'function') {
+      rsShowToast('已导入 ' + selected.length + ' 个问题到批量添加框');
+    }
+    return;
+  }
+
+  /* 默认：导入到采集设置页面的批量添加框 */
   var textarea = document.querySelector('.cs-textarea-box');
   if (textarea) {
     var existing = textarea.value.trim();

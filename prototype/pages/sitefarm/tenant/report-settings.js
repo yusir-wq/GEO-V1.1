@@ -2,12 +2,10 @@
  * 租户端 - 报表设置 (优化版 V2)
  *
  * 优化点：
- * 1. 顶部 Tab 切换：问题管理 / 分类绑定
- * 2. 左侧分类列表（扁平，带问题数，点击筛选）
- * 3. "添加并继续"按钮（只清空问题输入框，保留分类/平台/设备）
- * 4. 行内编辑分类 + 批量修改分类/删除
- * 5. CSV 导入（下载模板→上传→预览→导入）
- * 6. 分类绑定 Tab（分类级别绑定报表规则与采集规则，自动匹配同名分类）
+ * 1. 报表显示设置、背景设置
+ * 2. 问题批量添加 + 问题列表表格
+ * 3. CSV 导入（下载模板→上传→预览→导入）
+ * 4. 分类绑定（分类级别绑定报表规则与采集规则，自动匹配同名分类）
  */
 
 /* ========================================
@@ -20,17 +18,9 @@
   style.textContent = `
     /* ===== 通用 ===== */
     .rs-page-header {
-      display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 16px;
     }
     .rs-page-header h1 { font-size: 20px; font-weight: 600; }
-    .rs-page-header .back-btn {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 6px 14px; font-size: 13px; border: 1px solid var(--color-border);
-      background: var(--color-bg-card); border-radius: var(--radius-sm); cursor: pointer;
-      color: var(--color-text-primary);
-    }
-    .rs-page-header .back-btn:hover { border-color: var(--color-primary); color: var(--color-primary); }
 
     .rs-card {
       background: var(--color-bg-card); border: 1px solid var(--color-border);
@@ -38,7 +28,7 @@
     }
     .rs-card-title {
       font-size: 15px; font-weight: 600; color: var(--color-text-primary);
-      margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--color-border-light);
+      margin-bottom: 16px;
     }
 
     .rs-info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 24px; }
@@ -66,47 +56,6 @@
     }
     .rs-upload-btn:hover { background: var(--color-primary-bg); }
 
-    /* ===== Tab 切换 ===== */
-    .rs-tab-bar {
-      display: flex; gap: 0; border-bottom: 2px solid var(--color-border); margin-bottom: 16px;
-    }
-    .rs-tab {
-      padding: 10px 24px; font-size: 14px; font-weight: 500; cursor: pointer;
-      color: var(--color-text-secondary); border-bottom: 2px solid transparent; margin-bottom: -2px;
-      transition: color 0.2s, border-color 0.2s;
-    }
-    .rs-tab:hover { color: var(--color-primary); }
-    .rs-tab.active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
-
-    /* ===== 问题管理 Tab 布局 ===== */
-    .rs-tab-content { display: flex; gap: 16px; }
-
-    .rs-sidebar {
-      width: 200px; flex-shrink: 0; background: var(--color-bg-card);
-      border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;
-      align-self: flex-start; position: sticky; top: 12px;
-    }
-    .rs-sidebar-title {
-      font-size: 13px; font-weight: 600; color: var(--color-text-secondary);
-      margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--color-border-light);
-    }
-    .rs-sidebar-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 8px 10px; border-radius: var(--radius-sm); cursor: pointer;
-      font-size: 13px; color: var(--color-text-primary); margin-bottom: 2px;
-      transition: background 0.15s;
-    }
-    .rs-sidebar-item:hover { background: var(--color-bg-body); }
-    .rs-sidebar-item.active { background: var(--color-primary-bg); color: var(--color-primary); font-weight: 500; }
-    .rs-sidebar-item .rs-sidebar-count {
-      font-size: 12px; color: var(--color-text-tertiary); background: var(--color-bg-body);
-      padding: 1px 8px; border-radius: 10px;
-    }
-    .rs-sidebar-item.active .rs-sidebar-count { background: var(--color-primary); color: #fff; }
-    .rs-sidebar-divider { height: 1px; background: var(--color-border-light); margin: 6px 0; }
-
-    .rs-main { flex: 1; min-width: 0; }
-
     /* ===== 增加问题区 ===== */
     .rs-add-section {
       background: var(--color-bg-card); border: 1px solid var(--color-border);
@@ -128,6 +77,7 @@
     .rs-textarea {
       width: 100%; min-height: 110px; padding: 10px 12px; border: 1px solid var(--color-border);
       border-radius: var(--radius-sm); font-size: 13px; resize: vertical; outline: none;
+      background: #F4F9FF;
     }
     .rs-textarea:focus { border-color: var(--color-primary); }
     .rs-placeholder { font-size: 12px; color: var(--color-text-tertiary); margin-top: 6px; }
@@ -154,7 +104,7 @@
     .rs-list-toolbar-left input,
     .rs-list-toolbar-left select {
       padding: 6px 10px; border: 1px solid var(--color-border); border-radius: var(--radius-sm);
-      font-size: 13px; background: var(--color-bg-card); outline: none;
+      font-size: 13px; background: #F4F9FF; outline: none;
     }
     .rs-list-toolbar-left input { min-width: 160px; }
     .rs-list-toolbar-left select { min-width: 100px; cursor: pointer; }
@@ -171,35 +121,34 @@
     .rs-batch-bar .rs-batch-count { color: var(--color-primary); font-weight: 600; }
     .rs-batch-bar button { font-size: 12px; padding: 4px 12px; }
 
-    /* ===== 表格行内分类编辑 ===== */
-    .rs-cat-cell { position: relative; }
-    .rs-cat-tags { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+    /* ===== 表格分类 ===== */
     .rs-cat-badge {
       display: inline-block; padding: 2px 8px; border-radius: var(--radius-sm);
       font-size: 11px; background: var(--color-primary-bg); color: var(--color-primary);
       border: 1px solid var(--color-primary); white-space: nowrap;
     }
     .rs-cat-badge.uncategorized { background: var(--color-bg-body); color: var(--color-text-tertiary); border-color: var(--color-border); }
-    .rs-cat-edit-btn {
-      display: inline-flex; align-items: center; gap: 2px; cursor: pointer;
-      font-size: 11px; color: var(--color-primary); padding: 2px 6px; border-radius: var(--radius-sm);
-    }
-    .rs-cat-edit-btn:hover { background: var(--color-primary-bg); }
 
-    .rs-inline-cat-editor {
-      position: fixed; z-index: 10000; background: var(--color-bg-card);
-      border: 1px solid var(--color-border); border-radius: var(--radius-md);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12); padding: 12px; min-width: 220px;
-    }
-    .rs-inline-cat-title { font-size: 12px; font-weight: 600; margin-bottom: 8px; color: var(--color-text-secondary); }
-    .rs-inline-cat-list { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; }
-    .rs-inline-cat-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--color-border-light); }
-
-    /* ===== Footer ===== */
+    /* ===== 选择采集分类弹窗 ===== */
     .rs-footer {
-      display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; padding-top: 16px;
-      border-top: 1px solid var(--color-border-light);
+      position: fixed; bottom: 0; left: 260px; right: 0;
+      display: flex; justify-content: flex-end; gap: 12px; padding: 12px 32px;
+      background: var(--color-bg-card); border-top: 1px solid var(--color-border);
+      z-index: 100; box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
     }
+    .rs-footer .btn { height: 36px; min-width: 100px; }
+
+    /* ===== 客户订单信息 ===== */
+    .rs-order-info-row { display: flex; align-items: center; gap: 24px; line-height: 1; flex-wrap: wrap; }
+    .rs-order-info-row + .rs-order-info-row { margin-top: 8px; }
+    .rs-order-info-field { display: flex; align-items: baseline; gap: 6px; }
+    .rs-order-info-field .label { font-size: 12px; color: var(--color-text-tertiary); white-space: nowrap; }
+    .rs-order-info-field .value { font-size: 12px; color: var(--color-text-primary); }
+    .rs-order-info-field .value.bold { font-size: 14px; font-weight: 600; }
+    .rs-order-info-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .rs-order-info-tag { display: inline-flex; align-items: center; gap: 4px; border-radius: var(--radius-sm); padding: 2px 8px; font-size: 11px; color: var(--color-text-secondary); }
+    .rs-order-info-tag.type-keyword { background: #eef6ff; color: #3498db; }
+    .rs-order-info-tag.type-brand { background: #fef2f2; color: #e74c3c; }
 
     /* ===== Toast ===== */
     .rs-toast {
@@ -210,57 +159,8 @@
     }
     .rs-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-    /* ===== 拓词工具弹窗 ===== */
-    .rs-wordtool-modal { max-width: 900px; width: 90%; max-height: 86vh; overflow: hidden; display: flex; flex-direction: column; }
-    .rs-wordtool-body { overflow-y: auto; padding: 16px 20px; }
-    .rs-industry-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-    .rs-industry-tag {
-      padding: 4px 12px; border: 1px solid var(--color-border); border-radius: var(--radius-sm);
-      font-size: 12px; color: var(--color-text-secondary); cursor: pointer; background: var(--color-bg-card);
-    }
-    .rs-industry-tag.active { border-color: var(--color-primary); color: var(--color-primary); background: var(--color-primary-bg); }
-    .rs-word-columns { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 16px; }
-    .rs-word-col {
-      border: 1px solid var(--color-border); border-radius: var(--radius-sm); overflow: hidden;
-      display: flex; flex-direction: column; height: 240px;
-    }
-    .rs-word-col-header {
-      display: flex; align-items: center; gap: 6px; padding: 8px 10px;
-      background: var(--color-primary-bg); border-bottom: 1px solid var(--color-border);
-      font-size: 12px; font-weight: 500; color: var(--color-primary);
-    }
-    .rs-word-col-letter { width: 18px; height: 18px; border-radius: 4px; background: var(--color-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; }
-    .rs-word-col textarea {
-      flex: 1; border: none; padding: 8px; font-size: 12px; resize: none; outline: none;
-    }
-    .rs-combine-group { margin-bottom: 16px; }
-    .rs-combine-title { font-size: 13px; font-weight: 500; margin-bottom: 8px; }
-    .rs-combine-title .hint { font-size: 12px; color: var(--color-text-tertiary); font-weight: normal; }
-    .rs-combine-options { display: flex; flex-wrap: wrap; gap: 12px 20px; }
-    .rs-combine-options label { font-size: 12px; }
-    .rs-generate-btn-row { display: flex; justify-content: flex-end; margin-bottom: 16px; }
-    .rs-result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
-    .rs-result-table-wrap { border: 1px solid var(--color-border); border-radius: var(--radius-sm); max-height: 240px; overflow-y: auto; }
-    .rs-result-table { width: 100%; border-collapse: collapse; }
-    .rs-result-table th { background: var(--color-bg-body); padding: 8px 12px; text-align: left; font-size: 12px; font-weight: 500; color: var(--color-text-secondary); border-bottom: 1px solid var(--color-border); }
-    .rs-result-table td { padding: 8px 12px; font-size: 12px; border-bottom: 1px solid var(--color-border-light); }
-    .rs-result-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--color-border-light); }
-
-    /* ===== 管理分类弹窗 ===== */
-    .rs-category-modal { max-width: 420px; }
-    .rs-category-add-row { display: flex; gap: 8px; margin-bottom: 16px; }
-    .rs-category-add-row input { flex: 1; padding: 8px 10px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); font-size: 13px; outline: none; }
-    .rs-category-list { max-height: 300px; overflow-y: auto; }
-    .rs-category-list-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 0; border-bottom: 1px solid var(--color-border-light); font-size: 13px;
-    }
-    .rs-category-list-item:last-child { border-bottom: none; }
-    .rs-category-delete { color: var(--color-danger); cursor: pointer; font-size: 12px; }
-    .rs-category-delete:hover { text-decoration: underline; }
-    .rs-modal-footer { display: flex; justify-content: flex-end; padding-top: 12px; }
-
     /* ===== CSV 导入弹窗 ===== */
+    .rs-modal-footer { display: flex; justify-content: flex-end; padding-top: 12px; }
     .rs-import-modal { max-width: 720px; }
     .rs-import-step { margin-bottom: 16px; }
     .rs-import-step-label { font-size: 13px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
@@ -274,11 +174,7 @@
     .rs-import-preview-table td { padding: 6px 10px; border-bottom: 1px solid var(--color-border-light); }
     .rs-import-preview-table .invalid { color: var(--color-danger); }
 
-    /* ===== 批量修改弹窗 ===== */
-    .rs-batch-modal { max-width: 420px; }
-    .rs-batch-modal .rs-checkbox-group { flex-direction: column; gap: 10px; }
-
-    /* ===== 分类绑定 Tab ===== */
+    /* ===== 选择采集分类弹窗 ===== */
     .rs-binding-header {
       display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
     }
@@ -308,7 +204,7 @@ const REPORT_PROJECT = {
   id: '6d1bef6d-8a26-4a7c-8dc4-a81dcf1d330c',
   name: '蓝王科技项目2026年GEO曝光',
   product: 'GEO企业基础曝光套餐(5关键词+2品牌词)',
-  mainKeywords: '含羹机、露营灯、户外风扇、加湿器',
+  mainKeywords: '香薰机、露营灯、户外风扇、加湿器',
   brandKeywords: '蓝王科技'
 };
 
@@ -330,38 +226,35 @@ const RS_DEVICES = [
 ];
 
 let RS_CATEGORIES = [
-  { id: 'c1', name: '含羹机厂家' },
+  { id: 'c1', name: '香薰机厂家' },
   { id: 'c2', name: '露营灯供应商' },
   { id: 'c3', name: '户外风扇厂家' },
-  { id: 'c4', name: '加湿器原厂供应商' },
-  { id: 'c5', name: '智能家电品牌' },
-  { id: 'c6', name: '户外装备代理' }
+  { id: 'c4', name: '加湿器原厂供应商' }
 ];
 
 let RS_QUESTIONS = [
-  { id: 1, content: '东莞含羹加湿器厂家哪家专业', platform: '百度文心', device: '移动端', source: '采集', categoryIds: ['c1'] },
-  { id: 2, content: '东莞含羹加湿器厂家哪家专业', platform: '百度文心', device: '电脑端', source: '采集', categoryIds: ['c1'] },
-  { id: 3, content: '东莞迷你加湿器工厂哪家专业', platform: '百度文心', device: '电脑端', source: '采集', categoryIds: ['c4'] },
-  { id: 4, content: '东莞迷你加湿器工厂哪家专业', platform: '百度文心', device: '移动端', source: '采集', categoryIds: ['c4'] },
-  { id: 5, content: '东莞迷你加湿器公司哪家好', platform: '百度文心', device: '移动端', source: '采集', categoryIds: [] },
-  { id: 6, content: '东莞迷你加湿器公司哪家好', platform: '百度文心', device: '电脑端', source: '采集', categoryIds: [] },
-  { id: 7, content: '东莞迷你加湿器公司哪家专业', platform: '百度文心', device: '移动端', source: '采集', categoryIds: ['c4'] },
-  { id: 8, content: '东莞含羹加湿器厂家排名', platform: '百度文心', device: '电脑端', source: '采集', categoryIds: ['c1'] },
-  { id: 9, content: '露营灯品牌排行榜前十名', platform: 'DeepSeek', device: '电脑端', source: '拓词', categoryIds: ['c2'] },
-  { id: 10, content: '户外露营灯哪个牌子好', platform: 'Kimi', device: '移动端', source: '手动', categoryIds: ['c2'] },
-  { id: 11, content: '户外风扇品牌推荐', platform: '通义千问', device: '电脑端', source: '拓词', categoryIds: ['c3'] },
-  { id: 12, content: '户外风扇厂家批发价格', platform: '智谱清言', device: '移动端', source: '手动', categoryIds: ['c3'] },
-  { id: 13, content: '智能加湿器哪家好', platform: '豆包', device: '电脑端', source: '手动', categoryIds: ['c4', 'c5'] },
-  { id: 14, content: '户外装备代理加盟条件', platform: '腾讯元宝', device: '移动端', source: '手动', categoryIds: ['c6'] },
-  { id: 15, content: '含羹机厂家直销价格表', platform: '百度文心', device: '电脑端', source: '采集', categoryIds: ['c1'] }
+  { id: 1, content: '东莞香薰加湿器厂家哪家专业', platform: '百度文心', device: '移动端', source: '采集', categoryId: 'c1' },
+  { id: 2, content: '东莞香薰加湿器厂家哪家专业', platform: '百度文心', device: '电脑端', source: '采集', categoryId: 'c1' },
+  { id: 3, content: '东莞迷你加湿器工厂哪家专业', platform: '百度文心', device: '电脑端', source: '采集', categoryId: 'c4' },
+  { id: 4, content: '东莞迷你加湿器工厂哪家专业', platform: '百度文心', device: '移动端', source: '采集', categoryId: 'c4' },
+  { id: 5, content: '东莞迷你加湿器公司哪家好', platform: '百度文心', device: '移动端', source: '采集', categoryId: null },
+  { id: 6, content: '东莞迷你加湿器公司哪家好', platform: '百度文心', device: '电脑端', source: '采集', categoryId: null },
+  { id: 7, content: '东莞迷你加湿器公司哪家专业', platform: '百度文心', device: '移动端', source: '采集', categoryId: 'c4' },
+  { id: 8, content: '东莞香薰加湿器厂家排名', platform: '百度文心', device: '电脑端', source: '采集', categoryId: 'c1' },
+  { id: 9, content: '露营灯品牌排行榜前十名', platform: 'DeepSeek', device: '电脑端', source: '后台', categoryId: 'c2' },
+  { id: 10, content: '户外露营灯哪个牌子好', platform: 'Kimi', device: '移动端', source: '后台', categoryId: 'c2' },
+  { id: 11, content: '户外风扇品牌推荐', platform: '通义千问', device: '电脑端', source: '后台', categoryId: 'c3' },
+  { id: 12, content: '户外风扇厂家批发价格', platform: '智谱清言', device: '移动端', source: '后台', categoryId: 'c3' },
+  { id: 13, content: '智能加湿器哪家好', platform: '豆包', device: '电脑端', source: '后台', categoryId: 'c4' },
+  { id: 14, content: '香薰机厂家直销价格表', platform: '百度文心', device: '电脑端', source: '采集', categoryId: 'c1' }
 ];
 
 /* 采集规则分类（用于分类绑定 Tab） */
 let RS_COLLECTION_CATEGORIES = [
-  { id: 'cc1', name: '含羹机厂家' },
+  { id: 'cc1', name: '香薰机厂家' },
   { id: 'cc2', name: '露营灯供应商' },
   { id: 'cc3', name: '户外风扇厂家' },
-  { id: 'cc4', name: '家电批发商' }
+  { id: 'cc4', name: '加湿器原厂供应商' }
 ];
 
 /* 绑定关系: [{ reportCatId, collectionCatId }] */
@@ -370,13 +263,12 @@ let RS_BINDINGS = [];
 /* ========================================
    状态变量
    ======================================== */
-let RS_CURRENT_TAB = 'questions';
-let RS_FILTER_CATEGORY = null; /* null=全部, 'uncategorized'=未分类, category id=按分类筛选 */
 let RS_SELECTED_QUESTION_IDS = [];
+let RS_PAGE = 1;
+let RS_PAGE_SIZE = 10;
 let RS_SELECTED_CATEGORIES = [];
 let RS_SELECTED_PLATFORMS = [];
 let RS_SELECTED_DEVICES = [];
-let RS_GENERATED_WORDS = [];
 let RS_IMPORT_PREVIEW = [];
 
 /* ========================================
@@ -386,20 +278,30 @@ function renderReportSettings() {
   return `
     <div class="rs-page-header">
       <h1>报表设置 - ${REPORT_PROJECT.name}</h1>
-      <button class="back-btn" onclick="navigateTo('tenant-projects')">
-        ${window.getLucideIcon ? window.getLucideIcon('rotate-ccw') : ''}
-        <span>返回</span>
-      </button>
     </div>
 
-    <div class="rs-card">
+    <div class="rs-card" style="margin-bottom: 12px;">
       <div class="rs-card-title">客户订单信息</div>
-      <div class="rs-info-grid">
-        <div class="rs-info-item"><span class="rs-info-label">项目ID：</span><span class="rs-info-value">${REPORT_PROJECT.id}</span></div>
-        <div class="rs-info-item"><span class="rs-info-label">项目名称：</span><span class="rs-info-value">${REPORT_PROJECT.name}</span></div>
-        <div class="rs-info-item"><span class="rs-info-label">产品名称：</span><span class="rs-info-value">${REPORT_PROJECT.product}</span></div>
-        <div class="rs-info-item"><span class="rs-info-label">主关键词：</span><span class="rs-info-value">${REPORT_PROJECT.mainKeywords}</span></div>
-        <div class="rs-info-item"><span class="rs-info-label">品牌关键词：</span><span class="rs-info-value">${REPORT_PROJECT.brandKeywords}</span></div>
+      <div class="rs-order-info-row">
+        <div class="rs-order-info-field"><span class="label">项目名称</span><span class="value bold">蓝王科技项目2026年GEO曝光</span></div>
+        <div class="rs-order-info-field"><span class="label">项目ID</span><span class="value">6d1be45a-8a26-4a7c-8b4d-...</span></div>
+        <div class="rs-order-info-field"><span class="label">产品名称</span><span class="value">GEO企业基础曝光套餐5关键词+2品牌词</span></div>
+        <div class="rs-order-info-field"><span class="label">服务时间</span><span class="value">2026-06-24 ~ 2026-07-24</span></div>
+      </div>
+      <div class="rs-order-info-row">
+        <div class="rs-order-info-field"><span class="label">主关键词</span>
+          <div class="rs-order-info-tags">
+            <span class="rs-order-info-tag type-keyword">香薰机</span>
+            <span class="rs-order-info-tag type-keyword">露营灯</span>
+            <span class="rs-order-info-tag type-keyword">户外风扇</span>
+            <span class="rs-order-info-tag type-keyword">加湿器</span>
+          </div>
+        </div>
+        <div class="rs-order-info-field"><span class="label">品牌关键词</span>
+          <div class="rs-order-info-tags">
+            <span class="rs-order-info-tag type-brand">蓝王科技</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -410,17 +312,9 @@ function renderReportSettings() {
           <div class="rs-form-label">显示内容设置：</div>
           <div class="rs-checkbox-group">
             <label class="rs-checkbox-item"><input type="checkbox" checked><span>营销报表</span></label>
-            <label class="rs-checkbox-item"><input type="checkbox" checked><span>品牌报表</span></label>
-            <label class="rs-checkbox-item"><input type="checkbox"><span>诊断报告</span></label>
           </div>
         </div>
-        <div class="rs-form-group">
-          <div class="rs-form-label">报表查看权限设置：</div>
-          <div class="rs-checkbox-group">
-            <label class="rs-checkbox-item"><input type="radio" name="rsPermission" checked><span>完全公开</span></label>
-            <label class="rs-checkbox-item"><input type="radio" name="rsPermission"><span>登录后查看</span></label>
-          </div>
-        </div>
+        <div class="rs-form-group"></div>
       </div>
       <div class="rs-form-row">
         <div class="rs-form-group">
@@ -431,9 +325,33 @@ function renderReportSettings() {
           </div>
         </div>
         <div class="rs-form-group">
-          <div class="rs-form-label">公司介绍图片：<span class="rs-hint">建议尺寸：260x198px</span></div>
+          <div class="rs-form-label">公司介绍图片：<span class="rs-hint">建议尺寸：264×198px | 宽高比：4:3 | 大小：≤500KB | 格式：JPG、PNG、GIF</span></div>
           <div class="rs-upload-row">
             <button class="rs-upload-btn">上传</button>
+          </div>
+        </div>
+      </div>
+      <div class="rs-form-row">
+        <div class="rs-form-group" style="flex:1;min-width:100%;">
+          <div class="rs-form-label">报表背景设置：</div>
+          <div style="display:flex;align-items:flex-start;gap:24px;">
+            <div style="flex-shrink:0;">
+              <div class="rs-checkbox-group" style="gap:20px;">
+                <label class="rs-checkbox-item"><input type="radio" name="rsBgMode" value="default" checked onchange="rsOnBgModeChange(this)"><span>默认（纯色 #dae0f0）</span></label>
+                <label class="rs-checkbox-item"><input type="radio" name="rsBgMode" value="custom" onchange="rsOnBgModeChange(this)"><span>自定义渐变</span></label>
+              </div>
+              <div id="rsCustomColorPickers" style="display:none;align-items:center;gap:16px;margin-top:12px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:12px;color:var(--color-text-secondary);">起始色</span>
+                  <input type="color" id="rsGradientStart" value="#6366F1" onchange="rsUpdateGradientPreview()" style="width:36px;height:32px;border:1px solid var(--color-border);border-radius:4px;cursor:pointer;padding:2px;" />
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:12px;color:var(--color-text-secondary);">结束色</span>
+                  <input type="color" id="rsGradientEnd" value="#dae0f0" onchange="rsUpdateGradientPreview()" style="width:36px;height:32px;border:1px solid var(--color-border);border-radius:4px;cursor:pointer;padding:2px;" />
+                </div>
+              </div>
+            </div>
+            <div id="rsBgPreview" style="flex:1;min-width:200px;height:60px;border-radius:var(--radius-md);border:1px solid var(--color-border);background:#dae0f0;"></div>
           </div>
         </div>
       </div>
@@ -448,12 +366,8 @@ function renderReportSettings() {
       </div>
     </div>
 
-    <div class="rs-tab-bar">
-      <div class="rs-tab ${RS_CURRENT_TAB === 'questions' ? 'active' : ''}" onclick="rsSwitchTab('questions')">问题管理</div>
-      <div class="rs-tab ${RS_CURRENT_TAB === 'binding' ? 'active' : ''}" onclick="rsSwitchTab('binding')">分类绑定</div>
-    </div>
-
-    ${RS_CURRENT_TAB === 'questions' ? rsRenderQuestionsTab() : rsRenderBindingTab()}
+    ${rsBuildAddSectionCard()}
+    ${rsBuildListCard()}
 
     <div class="rs-footer">
       <button class="btn btn-ghost" onclick="navigateTo('tenant-projects')">取消</button>
@@ -465,55 +379,20 @@ function renderReportSettings() {
 window.renderReportSettings = renderReportSettings;
 
 /* ========================================
-   Tab 1: 问题管理
+   增加问题卡片
    ======================================== */
-function rsRenderQuestionsTab() {
-  return `
-    <div class="rs-tab-content">
-      <div class="rs-sidebar">
-        ${rsBuildCategorySidebar()}
-      </div>
-      <div class="rs-main">
-        ${rsBuildAddSection()}
-        ${rsBuildListSection()}
-      </div>
-    </div>
-  `;
+function rsBuildAddSectionCard() {
+  return '<div class="rs-card">' +
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">' +
+      '<div class="rs-card-title" style="margin-bottom:0;">增加在报表中的问题</div>' +
+      '<button class="btn btn-secondary btn-sm" onclick="csOpenTuociModal()">拓词工具</button>' +
+    '</div>' +
+    rsBuildAddSectionInner() +
+    '</div>';
 }
 
-/* ----- 左侧分类列表 ----- */
-function rsBuildCategorySidebar() {
-  const totalCount = RS_QUESTIONS.length;
-  const uncategorizedCount = RS_QUESTIONS.filter(q => !q.categoryIds || q.categoryIds.length === 0).length;
-
-  const categoryItems = RS_CATEGORIES.map(c => {
-    const count = RS_QUESTIONS.filter(q => q.categoryIds && q.categoryIds.includes(c.id)).length;
-    const isActive = RS_FILTER_CATEGORY === c.id;
-    return `
-      <div class="rs-sidebar-item ${isActive ? 'active' : ''}" onclick="rsFilterByCategory('${c.id}')">
-        <span>${c.name}</span>
-        <span class="rs-sidebar-count">${count}</span>
-      </div>
-    `;
-  }).join('');
-
-  return `
-    <div class="rs-sidebar-title">分类筛选</div>
-    <div class="rs-sidebar-item ${RS_FILTER_CATEGORY === null ? 'active' : ''}" onclick="rsFilterByCategory(null)">
-      <span>全部</span>
-      <span class="rs-sidebar-count">${totalCount}</span>
-    </div>
-    <div class="rs-sidebar-item ${RS_FILTER_CATEGORY === 'uncategorized' ? 'active' : ''}" onclick="rsFilterByCategory('uncategorized')">
-      <span>未分类</span>
-      <span class="rs-sidebar-count">${uncategorizedCount}</span>
-    </div>
-    <div class="rs-sidebar-divider"></div>
-    ${categoryItems}
-  `;
-}
-
-/* ----- 增加问题区 ----- */
-function rsBuildAddSection() {
+/* ----- 增加问题区（内部内容，不含卡片壳） ----- */
+function rsBuildAddSectionInner() {
   const platformHtml = RS_PLATFORMS.map(p => `
     <label class="rs-checkbox-item">
       <input type="checkbox" value="${p.id}" onchange="rsTogglePlatform('${p.id}')" ${RS_SELECTED_PLATFORMS.includes(p.id) ? 'checked' : ''}>
@@ -539,21 +418,14 @@ function rsBuildAddSection() {
 
   return `
     <div class="rs-add-section">
-      <div class="rs-add-section-header">
-        <div class="rs-add-section-title">增加在报表中的问题</div>
-        <div>
-          <button class="btn btn-primary btn-sm" onclick="openWordToolModal()">拓词工具</button>
-          <button class="rs-import-btn" onclick="openImportModal()">导入CSV</button>
-        </div>
-      </div>
       <div class="rs-add-grid">
         <div class="rs-add-left">
-          <textarea class="rs-textarea" id="rsQuestionInput" placeholder="请输入问题"></textarea>
-          <div class="rs-placeholder">每行一个，或逗号分隔</div>
+          <textarea class="rs-textarea" id="rsQuestionInput" placeholder="请输入问题，每行1个，所属分类可用；隔开，如：&#10;香薰机生产厂家口碑推荐；香薰机生产厂家&#10;露营灯厂家有哪些；露营灯供应商"></textarea>
+          <div class="rs-placeholder">每行一个，所属分类用中文分号"；"隔开</div>
           <div class="rs-category-row">
             <div class="rs-category-header">
               <span class="rs-form-label" style="margin-bottom:0">所属分类：</span>
-              <span class="rs-link" onclick="openCategoryModal()">+ 管理分类</span>
+              <span class="rs-link" onclick="csOpenCatManageModal()">+ 管理分类</span>
             </div>
             <div class="rs-checkbox-group" id="rsCategoryList" style="gap:8px">
               ${categoryHtml}
@@ -561,7 +433,6 @@ function rsBuildAddSection() {
           </div>
           <div class="rs-add-btn-row">
             <button class="btn btn-primary" onclick="rsBulkAdd()">批量添加</button>
-            <button class="btn btn-ghost" onclick="rsAddAndContinue()">添加并继续</button>
           </div>
         </div>
         <div class="rs-add-right">
@@ -581,120 +452,169 @@ function rsBuildAddSection() {
   `;
 }
 
-/* ----- 问题列表 ----- */
-function rsBuildListSection() {
-  const filtered = rsGetFilteredQuestions();
-  const totalPages = Math.max(1, Math.ceil(filtered.length / 10));
-  const displayRows = filtered.slice(0, 10);
+/* ----- 问题列表卡片 ----- */
+function rsBuildListCard() {
+  return '<div class="rs-card" id="rsQuestionListCard">' +
+    '<div class="rs-card-title">已添加问题列表</div>' +
+    rsBuildListSectionInner() +
+    '</div>';
+}
 
-  const questionRows = displayRows.map((q, i) => {
-    const catNames = (q.categoryIds || []).map(cid => {
-      const cat = RS_CATEGORIES.find(c => c.id === cid);
+/* ----- 问题列表（内部内容） ----- */
+function rsBuildListSectionInner() {
+  var filtered = rsGetFilteredQuestions();
+  var totalItems = filtered.length;
+  var totalPages = Math.max(1, Math.ceil(totalItems / RS_PAGE_SIZE));
+  if (RS_PAGE > totalPages) RS_PAGE = totalPages;
+  var startIdx = (RS_PAGE - 1) * RS_PAGE_SIZE;
+  var displayRows = filtered.slice(startIdx, startIdx + RS_PAGE_SIZE);
+
+  var questionRows = displayRows.map(function(q, i) {
+    var globalIdx = startIdx + i + 1;
+    var catName = q.categoryId ? (function(cid) {
+      var cat = RS_CATEGORIES.find(function(c) { return c.id === cid; });
       return cat ? cat.name : null;
-    }).filter(Boolean);
+    })(q.categoryId) : null;
 
-    const catBadges = catNames.length
-      ? catNames.map(n => `<span class="rs-cat-badge">${n}</span>`).join('')
-      : '<span class="rs-cat-badge uncategorized">未分类</span>';
+    var catHtml = '';
+    if (q._editingCat) {
+      /* 编辑状态：显示 select 下拉 */
+      var catOptionsHtml = RS_CATEGORIES.map(function(c) {
+        return '<option value="' + c.id + '"' + (q.categoryId === c.id ? ' selected' : '') + '>' + c.name + '</option>';
+      }).join('');
+      catHtml = '<select style="min-width:100px;padding:3px 6px;font-size:11px;border:1px solid var(--color-border);border-radius:3px;outline:none;background:#F4F9FF;" onchange="rsSetQuestionCategory(' + q.id + ', this.value)" onblur="rsRenderTableOnly()">' +
+        '<option value="">未分类</option>' + catOptionsHtml + '</select>';
+    } else {
+      if (catName) {
+        catHtml = '<span class="rs-cat-badge" onclick="event.stopPropagation(); rsStartEditCategory(' + q.id + ')" title="点击修改分类">' + catName + '</span>';
+      } else {
+        catHtml = '<span class="rs-cat-badge uncategorized" onclick="event.stopPropagation(); rsStartEditCategory(' + q.id + ')" title="点击设置分类">未分类</span>';
+      }
+    }
 
-    const isChecked = RS_SELECTED_QUESTION_IDS.includes(q.id);
+    var isChecked = RS_SELECTED_QUESTION_IDS.indexOf(q.id) !== -1;
 
-    return `
-      <tr>
-        <td style="width:40px"><input type="checkbox" ${isChecked ? 'checked' : ''} onchange="rsToggleQuestionSelect(${q.id})"></td>
-        <td style="width:50px">${i + 1}</td>
-        <td>${q.content}</td>
-        <td style="width:90px">${q.platform}</td>
-        <td style="width:70px">${q.device}</td>
-        <td style="width:60px">${q.source}</td>
-        <td style="width:180px" class="rs-cat-cell" id="rsCatCell-${q.id}">
-          <div class="rs-cat-tags">
-            ${catBadges}
-            <span class="rs-cat-edit-btn" onclick="event.stopPropagation(); rsOpenInlineCatEditor(${q.id})">
-              ${window.getLucideIcon ? window.getLucideIcon('pencil', '') : '编辑'}
-            </span>
-          </div>
-        </td>
-        <td style="width:60px">
-          <button class="btn btn-ghost btn-sm text-danger" onclick="rsDeleteQuestion(${q.id})">删除</button>
-        </td>
-      </tr>
-    `;
+    return (
+      '<tr>' +
+        '<td style="width:40px"><input type="checkbox" ' + (isChecked ? 'checked' : '') + ' onchange="rsToggleQuestionSelect(' + q.id + ')"></td>' +
+        '<td style="width:50px">' + globalIdx + '</td>' +
+        '<td>' + q.content + '</td>' +
+        '<td style="width:100px;white-space:nowrap">' + q.platform + '</td>' +
+        '<td style="width:80px;white-space:nowrap">' + q.device + '</td>' +
+        '<td style="width:80px;white-space:nowrap">' + q.source + '</td>' +
+        '<td style="width:180px">' + catHtml + '</td>' +
+        '<td style="width:60px">' +
+          '<button class="btn btn-ghost btn-sm text-danger" onclick="rsDeleteQuestion(' + q.id + ')">删除</button>' +
+        '</td>' +
+      '</tr>'
+    );
   }).join('');
 
-  const batchBar = RS_SELECTED_QUESTION_IDS.length > 0 ? `
-    <div class="rs-batch-bar">
-      <span>已选 <span class="rs-batch-count">${RS_SELECTED_QUESTION_IDS.length}</span> 项</span>
-      <button class="btn btn-ghost btn-sm" onclick="openBatchModifyModal()">批量修改分类</button>
-      <button class="btn btn-ghost btn-sm text-danger" onclick="rsBatchDelete()">批量删除</button>
-      <button class="btn btn-ghost btn-sm" onclick="rsClearSelection()">取消选择</button>
-    </div>
-  ` : '';
+  /* 批量操作栏 */
+  var batchBar = RS_SELECTED_QUESTION_IDS.length > 0 ? (
+    '<div class="rs-batch-bar">' +
+      '<span>已选 <span class="rs-batch-count">' + RS_SELECTED_QUESTION_IDS.length + '</span> 项</span>' +
+      '<button class="btn btn-ghost btn-sm" id="rsBatchCatToggleBtn" onclick="rsToggleBatchCatArea()">批量修改分类</button>' +
+      '<button class="btn btn-ghost btn-sm text-danger" onclick="rsBatchDelete()">批量删除</button>' +
+      '<button class="btn btn-ghost btn-sm" onclick="rsClearSelection()">取消选择</button>' +
+    '</div>' +
+    '<div id="rsBatchCatArea" style="display:none;align-items:center;gap:8px;padding:8px 12px;margin-bottom:8px;background:var(--color-primary-bg);border:1px solid var(--color-primary);border-radius:var(--radius-sm);font-size:13px;">' +
+      '<span style="font-size:12px;color:var(--color-text-secondary)">设置分类：</span>' +
+      '<select id="rsBatchCatSelect" style="padding:4px 8px;border:1px solid var(--color-border);border-radius:var(--radius-sm);font-size:13px;background:#F4F9FF;outline:none;">' +
+        '<option value="">选择分类</option>' +
+        RS_CATEGORIES.map(function(c) { return '<option value="' + c.id + '">' + c.name + '</option>'; }).join('') +
+      '</select>' +
+      '<button class="btn btn-primary btn-sm" onclick="rsConfirmBatchCat()">确认</button>' +
+      '<button class="btn btn-ghost btn-sm" onclick="rsCancelBatchCat()">取消</button>' +
+    '</div>'
+  ) : '';
 
-  return `
-    <div class="rs-list-section">
-      <div class="rs-card-title">已添加问题列表</div>
-      <div class="rs-list-toolbar">
-        <div class="rs-list-toolbar-left">
-          <input type="text" placeholder="搜索问题..." id="rsSearchInput" onkeyup="if(event.key==='Enter') rsSearchQuestions()" value="${rsGetSearchValue()}">
-          <select id="rsFilterPlatform" onchange="rsRenderTableOnly()">
-            <option value="">全部平台</option>
-            ${RS_PLATFORMS.map(p => `<option ${rsGetFilterValue('platform') === p.name ? 'selected' : ''}>${p.name}</option>`).join('')}
-          </select>
-          <select id="rsFilterDevice" onchange="rsRenderTableOnly()">
-            <option value="">全部设备</option>
-            <option ${rsGetFilterValue('device') === '电脑端' ? 'selected' : ''}>电脑端</option>
-            <option ${rsGetFilterValue('device') === '移动端' ? 'selected' : ''}>移动端</option>
-          </select>
-          <select id="rsFilterSource" onchange="rsRenderTableOnly()">
-            <option value="">全部来源</option>
-            <option ${rsGetFilterValue('source') === '采集' ? 'selected' : ''}>采集</option>
-            <option ${rsGetFilterValue('source') === '手动' ? 'selected' : ''}>手动</option>
-            <option ${rsGetFilterValue('source') === '拓词' ? 'selected' : ''}>拓词</option>
-          </select>
-          <button class="btn btn-primary btn-sm" onclick="rsSearchQuestions()">搜索</button>
-          <button class="btn btn-ghost btn-sm" onclick="rsClearFilters()">清空</button>
-        </div>
-      </div>
-      ${batchBar}
-      <div class="table-container">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th style="width:40px"><input type="checkbox" onchange="rsToggleAllQuestions(this)"></th>
-              <th style="width:50px">序号</th>
-              <th>问题</th>
-              <th style="width:90px">平台</th>
-              <th style="width:70px">设备</th>
-              <th style="width:60px">来源</th>
-              <th style="width:180px">分类</th>
-              <th style="width:60px">操作</th>
-            </tr>
-          </thead>
-          <tbody id="rsQuestionTableBody">
-            ${questionRows || '<tr><td colspan="8" style="text-align:center;color:var(--color-text-tertiary);padding:24px">暂无数据</td></tr>'}
-          </tbody>
-        </table>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
-        <div class="rs-list-summary">
-          共 <strong>${filtered.length}</strong> 个问题
-          <span class="danger" style="margin-left:12px" onclick="rsDeleteAllQuestions()">全部删除</span>
-        </div>
-        <div class="pagination" style="margin-top:0">
-          <div class="pagination-info">第 1 页，共 ${filtered.length} 条</div>
-          <div class="pagination-pages">
-            <button class="pagination-btn disabled">‹</button>
-            <button class="pagination-btn active">1</button>
-            ${totalPages > 1 ? `<button class="pagination-btn">2</button>` : ''}
-            ${totalPages > 2 ? `<span style="padding:0 6px;color:var(--color-text-tertiary)">...</span>` : ''}
-            ${totalPages > 1 ? `<button class="pagination-btn">${totalPages}</button>` : ''}
-            ${totalPages > 1 ? `<button class="pagination-btn">›</button>` : ''}
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+  /* 分页 */
+  var paginationHtml = '';
+  if (totalItems > RS_PAGE_SIZE) {
+    var pageButtons = '';
+    if (totalPages <= 7) {
+      for (var p = 1; p <= totalPages; p++) {
+        pageButtons += '<button class="pagination-btn' + (p === RS_PAGE ? ' active' : '') + '" onclick="rsGoToPage(' + p + ')">' + p + '</button>';
+      }
+    } else {
+      pageButtons += '<button class="pagination-btn' + (1 === RS_PAGE ? ' active' : '') + '" onclick="rsGoToPage(1)">1</button>';
+      if (RS_PAGE > 3) pageButtons += '<span style="padding:0 6px;color:var(--color-text-tertiary)">...</span>';
+      var startP = Math.max(2, RS_PAGE - 1);
+      var endP = Math.min(totalPages - 1, RS_PAGE + 1);
+      for (var p2 = startP; p2 <= endP; p2++) {
+        pageButtons += '<button class="pagination-btn' + (p2 === RS_PAGE ? ' active' : '') + '" onclick="rsGoToPage(' + p2 + ')">' + p2 + '</button>';
+      }
+      if (RS_PAGE < totalPages - 2) pageButtons += '<span style="padding:0 6px;color:var(--color-text-tertiary)">...</span>';
+      pageButtons += '<button class="pagination-btn' + (totalPages === RS_PAGE ? ' active' : '') + '" onclick="rsGoToPage(' + totalPages + ')">' + totalPages + '</button>';
+    }
+    paginationHtml =
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">' +
+        '<div class="rs-list-summary">共 <strong>' + totalItems + '</strong> 个问题' +
+          '<span class="danger" style="margin-left:12px" onclick="rsDeleteAllQuestions()">全部删除</span></div>' +
+        '<div class="pagination" style="margin-top:0">' +
+          '<div class="pagination-info">第 ' + RS_PAGE + ' 页，共 ' + totalItems + ' 条</div>' +
+          '<div class="pagination-pages">' +
+            '<button class="pagination-btn' + (RS_PAGE === 1 ? ' disabled' : '') + '" onclick="rsGoToPage(' + (RS_PAGE - 1) + ')" ' + (RS_PAGE === 1 ? 'disabled' : '') + '>‹</button>' +
+            pageButtons +
+            '<button class="pagination-btn' + (RS_PAGE === totalPages ? ' disabled' : '') + '" onclick="rsGoToPage(' + (RS_PAGE + 1) + ')" ' + (RS_PAGE === totalPages ? 'disabled' : '') + '>›</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  } else {
+    paginationHtml =
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">' +
+        '<div class="rs-list-summary">共 <strong>' + totalItems + '</strong> 个问题' +
+          '<span class="danger" style="margin-left:12px" onclick="rsDeleteAllQuestions()">全部删除</span></div>' +
+      '</div>';
+  }
+
+  return (
+    '<div class="rs-list-section">' +
+      '<div class="rs-list-toolbar">' +
+        '<div class="rs-list-toolbar-left">' +
+          '<input type="text" placeholder="搜索问题..." id="rsSearchInput" onkeyup="if(event.key===\'Enter\') rsSearchQuestions()" value="' + rsGetSearchValue() + '">' +
+          '<select id="rsFilterPlatform" onchange="rsFilterChanged()">' +
+            '<option value="">全部平台</option>' +
+            RS_PLATFORMS.map(function(p) { return '<option ' + (rsGetFilterValue('platform') === p.name ? 'selected' : '') + '>' + p.name + '</option>'; }).join('') +
+          '</select>' +
+          '<select id="rsFilterDevice" onchange="rsFilterChanged()">' +
+            '<option value="">全部设备</option>' +
+            '<option ' + (rsGetFilterValue('device') === '电脑端' ? 'selected' : '') + '>电脑端</option>' +
+            '<option ' + (rsGetFilterValue('device') === '移动端' ? 'selected' : '') + '>移动端</option>' +
+          '</select>' +
+          '<select id="rsFilterSource" onchange="rsFilterChanged()">' +
+            '<option value="">全部来源</option>' +
+            '<option ' + (rsGetFilterValue('source') === '采集' ? 'selected' : '') + '>采集</option>' +
+            '<option ' + (rsGetFilterValue('source') === '后台' ? 'selected' : '') + '>后台</option>' +
+          '</select>' +
+          '<button class="btn btn-primary btn-sm" onclick="rsSearchQuestions()">搜索</button>' +
+          '<button class="btn btn-ghost btn-sm" onclick="rsClearFilters()">清空</button>' +
+        '</div>' +
+      '</div>' +
+      batchBar +
+      '<div class="table-container">' +
+        '<table class="data-table">' +
+          '<thead>' +
+            '<tr>' +
+              '<th style="width:40px"><input type="checkbox" onchange="rsToggleAllQuestions(this)"></th>' +
+              '<th style="width:50px">序号</th>' +
+              '<th>问题</th>' +
+              '<th style="width:100px">平台</th>' +
+              '<th style="width:80px">设备</th>' +
+              '<th style="width:80px">来源</th>' +
+              '<th style="width:200px">分类</th>' +
+              '<th style="width:60px">操作</th>' +
+            '</tr>' +
+          '</thead>' +
+          '<tbody id="rsQuestionTableBody">' +
+            (questionRows || '<tr><td colspan="8" style="text-align:center;color:var(--color-text-tertiary);padding:24px">暂无数据</td></tr>') +
+          '</tbody>' +
+        '</table>' +
+      '</div>' +
+      paginationHtml +
+    '</div>'
+  );
 }
 
 /* ========================================
@@ -804,23 +724,6 @@ function rsRenderBindingTab() {
 }
 
 /* ========================================
-   交互：Tab 切换
-   ======================================== */
-function rsSwitchTab(tab) {
-  RS_CURRENT_TAB = tab;
-  navigateTo('tenant-report-settings');
-}
-
-/* ========================================
-   交互：分类侧边栏
-   ======================================== */
-function rsFilterByCategory(catId) {
-  RS_FILTER_CATEGORY = catId;
-  RS_SELECTED_QUESTION_IDS = [];
-  navigateTo('tenant-report-settings');
-}
-
-/* ========================================
    交互：添加问题区
    ======================================== */
 function rsToggleCategory(id) {
@@ -877,65 +780,74 @@ function rsToggleAllDevices(cb) {
   navigateTo('tenant-report-settings');
 }
 
-/* 批量添加：清空所有内容（问题+分类+平台+设备） */
+/* 批量添加：解析"问题；分类"格式 */
 function rsBulkAdd() {
   const input = document.getElementById('rsQuestionInput');
   const text = (input.value || '').trim();
-  if (!text) { alert('请输入问题'); return; }
-  const lines = text.split(/[\n,，]/).map(s => s.trim()).filter(Boolean);
-  if (!lines.length) { alert('请输入有效的问题'); return; }
+  if (!text) { rsShowToast('请输入问题内容'); return; }
 
-  rsAddQuestions(lines, RS_SELECTED_CATEGORIES, RS_SELECTED_PLATFORMS, RS_SELECTED_DEVICES);
+  const lines = text.split('\n').filter(line => line.trim());
+  const newProblems = [];
+  const newCategories = new Set();
 
-  /* 清空所有 */
+  lines.forEach(line => {
+    const parts = line.split('；');
+    const question = parts[0].trim();
+    const category = parts[1] ? parts[1].trim() : '';
+
+    if (question) {
+      newProblems.push({
+        content: question,
+        categoryName: category,
+        platform: RS_SELECTED_PLATFORMS.length
+          ? RS_PLATFORMS.find(p => p.id === RS_SELECTED_PLATFORMS[0]).name
+          : '百度文心',
+        device: RS_SELECTED_DEVICES.length
+          ? RS_DEVICES.find(d => d.id === RS_SELECTED_DEVICES[0]).name
+          : '移动端',
+        source: '后台'
+      });
+
+      if (category && !RS_CATEGORIES.some(c => c.name === category)) {
+        newCategories.add(category);
+      }
+    }
+  });
+
+  if (!newProblems.length) { rsShowToast('未找到有效的问题'); return; }
+
+  /* 添加新分类 */
+  if (newCategories.size > 0) {
+    let maxId = RS_CATEGORIES.length ? Math.max(...RS_CATEGORIES.map(c => parseInt(c.id.replace('c', '')) || 0)) : 0;
+    newCategories.forEach(catName => {
+      RS_CATEGORIES.push({ id: 'c' + (++maxId), name: catName });
+    });
+    const container = document.getElementById('rsCategoryList');
+    if (container) container.innerHTML = rsBuildCategoryCheckboxes();
+  }
+
+  /* 添加到问题列表，匹配分类ID */
+  let qMaxId = RS_QUESTIONS.length ? Math.max(...RS_QUESTIONS.map(q => q.id)) : 0;
+  newProblems.forEach(p => {
+    var catId = p.categoryName
+      ? (RS_CATEGORIES.find(c => c.name === p.categoryName) || {}).id || null
+      : null;
+    RS_QUESTIONS.unshift({
+      id: ++qMaxId,
+      content: p.content,
+      platform: p.platform,
+      device: p.device,
+      source: p.source,
+      categoryId: catId || null
+    });
+  });
+
   input.value = '';
   RS_SELECTED_CATEGORIES = [];
   RS_SELECTED_PLATFORMS = [];
   RS_SELECTED_DEVICES = [];
   navigateTo('tenant-report-settings');
-  setTimeout(() => alert(`成功添加 ${lines.length} 个问题`), 50);
-}
-
-/* 添加并继续：只清空问题输入框，保留分类/平台/设备 */
-function rsAddAndContinue() {
-  const input = document.getElementById('rsQuestionInput');
-  const text = (input.value || '').trim();
-  if (!text) { alert('请输入问题'); return; }
-  const lines = text.split(/[\n,，]/).map(s => s.trim()).filter(Boolean);
-  if (!lines.length) { alert('请输入有效的问题'); return; }
-
-  rsAddQuestions(lines, RS_SELECTED_CATEGORIES, RS_SELECTED_PLATFORMS, RS_SELECTED_DEVICES);
-
-  /* 只清空问题输入框 */
-  input.value = '';
-
-  /* 局部刷新表格和侧边栏（不整页刷新，保持焦点） */
-  rsRenderTableOnly();
-  rsRenderSidebarOnly();
-  input.focus();
-
-  rsShowToast(`成功添加 ${lines.length} 个问题，可继续输入`);
-}
-
-function rsAddQuestions(lines, categoryIds, platformIds, deviceIds) {
-  const platformName = platformIds.length
-    ? RS_PLATFORMS.find(p => p.id === platformIds[0]).name
-    : '百度文心';
-  const deviceName = deviceIds.length
-    ? RS_DEVICES.find(d => d.id === deviceIds[0]).name
-    : '移动端';
-
-  let maxId = RS_QUESTIONS.length ? Math.max(...RS_QUESTIONS.map(q => q.id)) : 0;
-  lines.forEach(line => {
-    RS_QUESTIONS.unshift({
-      id: ++maxId,
-      content: line,
-      platform: platformName,
-      device: deviceName,
-      source: '手动',
-      categoryIds: [...categoryIds]
-    });
-  });
+  setTimeout(() => rsShowToast('已添加 ' + newProblems.length + ' 个问题'), 50);
 }
 
 /* ========================================
@@ -943,13 +855,6 @@ function rsAddQuestions(lines, categoryIds, platformIds, deviceIds) {
    ======================================== */
 function rsGetFilteredQuestions() {
   let result = RS_QUESTIONS;
-
-  /* 按分类筛选 */
-  if (RS_FILTER_CATEGORY === 'uncategorized') {
-    result = result.filter(q => !q.categoryIds || q.categoryIds.length === 0);
-  } else if (RS_FILTER_CATEGORY) {
-    result = result.filter(q => q.categoryIds && q.categoryIds.includes(RS_FILTER_CATEGORY));
-  }
 
   /* 按搜索关键词筛选 */
   const keyword = rsGetSearchValue();
@@ -991,18 +896,30 @@ function rsGetFilterValue(type) {
 }
 
 function rsSearchQuestions() {
+  RS_PAGE = 1;
   rsRenderTableOnly();
 }
 
 function rsClearFilters() {
-  const searchEl = document.getElementById('rsSearchInput');
+  var searchEl = document.getElementById('rsSearchInput');
   if (searchEl) searchEl.value = '';
-  const pEl = document.getElementById('rsFilterPlatform');
+  var pEl = document.getElementById('rsFilterPlatform');
   if (pEl) pEl.value = '';
-  const dEl = document.getElementById('rsFilterDevice');
+  var dEl = document.getElementById('rsFilterDevice');
   if (dEl) dEl.value = '';
-  const sEl = document.getElementById('rsFilterSource');
+  var sEl = document.getElementById('rsFilterSource');
   if (sEl) sEl.value = '';
+  RS_PAGE = 1;
+  rsRenderTableOnly();
+}
+
+function rsFilterChanged() {
+  RS_PAGE = 1;
+  rsRenderTableOnly();
+}
+
+function rsGoToPage(page) {
+  RS_PAGE = page;
   rsRenderTableOnly();
 }
 
@@ -1053,150 +970,77 @@ function rsBatchDelete() {
   navigateTo('tenant-report-settings');
 }
 
-/* ----- 行内编辑分类 ----- */
-function rsOpenInlineCatEditor(questionId) {
-  rsCloseInlineCatEditor();
-
-  const q = RS_QUESTIONS.find(x => x.id === questionId);
+/* ----- 单分类编辑：点击badge → 内联select ----- */
+function rsStartEditCategory(questionId) {
+  var q = RS_QUESTIONS.find(function(x) { return x.id === questionId; });
   if (!q) return;
-
-  const cell = document.getElementById('rsCatCell-' + questionId);
-  if (!cell) return;
-
-  const rect = cell.getBoundingClientRect();
-  const panel = document.createElement('div');
-  panel.id = 'rsInlineCatEditor';
-  panel.className = 'rs-inline-cat-editor';
-  panel.style.left = Math.min(rect.left, window.innerWidth - 260) + 'px';
-  panel.style.top = (rect.bottom + 4) + 'px';
-
-  panel.innerHTML = `
-    <div class="rs-inline-cat-title">修改分类</div>
-    <div class="rs-inline-cat-list">
-      ${RS_CATEGORIES.map(c => `
-        <label class="rs-checkbox-item">
-          <input type="checkbox" value="${c.id}" ${(q.categoryIds || []).includes(c.id) ? 'checked' : ''}>
-          <span>${c.name}</span>
-        </label>
-      `).join('') || '<span class="rs-empty-text">暂无分类</span>'}
-    </div>
-    <div class="rs-inline-cat-footer">
-      <button class="btn btn-ghost btn-sm" onclick="rsCloseInlineCatEditor()">取消</button>
-      <button class="btn btn-primary btn-sm" onclick="rsApplyInlineCategory(${questionId})">确认</button>
-    </div>
-  `;
-
-  document.body.appendChild(panel);
-  setTimeout(() => { document.addEventListener('click', rsInlineCatOutsideClick); }, 0);
-}
-
-function rsInlineCatOutsideClick(e) {
-  const panel = document.getElementById('rsInlineCatEditor');
-  if (panel && !panel.contains(e.target) && !e.target.closest('.rs-cat-edit-btn')) {
-    rsCloseInlineCatEditor();
-  }
-}
-
-function rsCloseInlineCatEditor() {
-  const panel = document.getElementById('rsInlineCatEditor');
-  if (panel) panel.remove();
-  document.removeEventListener('click', rsInlineCatOutsideClick);
-}
-
-function rsApplyInlineCategory(questionId) {
-  const panel = document.getElementById('rsInlineCatEditor');
-  if (!panel) return;
-  const checkboxes = panel.querySelectorAll('input[type="checkbox"]:checked');
-  const newCategoryIds = Array.from(checkboxes).map(cb => cb.value);
-
-  const q = RS_QUESTIONS.find(x => x.id === questionId);
-  if (q) q.categoryIds = newCategoryIds;
-
-  rsCloseInlineCatEditor();
+  /* 先关闭其他可能正在编辑的 */
+  RS_QUESTIONS.forEach(function(x) { x._editingCat = false; });
+  q._editingCat = true;
   rsRenderTableOnly();
-  rsRenderSidebarOnly();
-  rsShowToast('分类已更新');
+}
+
+function rsSetQuestionCategory(questionId, catId) {
+  var q = RS_QUESTIONS.find(function(x) { return x.id === questionId; });
+  if (!q) return;
+  q._editingCat = false;
+  q.categoryId = catId || null;
+  rsRenderTableOnly();
+  var catName = catId
+    ? (RS_CATEGORIES.find(function(c) { return c.id === catId; }) || {}).name || ''
+    : '';
+  rsShowToast(catName ? '分类已更新为「' + catName + '」' : '已清除分类');
 }
 
 /* ----- 局部刷新（不整页跳转） ----- */
 function rsRenderTableOnly() {
-  const listSection = document.querySelector('.rs-list-section');
-  if (!listSection) { navigateTo('tenant-report-settings'); return; }
+  var card = document.getElementById('rsQuestionListCard');
+  if (!card) { navigateTo('tenant-report-settings'); return; }
 
-  /* 重建整个列表区域 */
-  const newHtml = rsBuildListSection();
-  /* 用外层容器替换 */
-  const wrapper = document.createElement('div');
-  wrapper.innerHTML = newHtml;
-  const newList = wrapper.firstElementChild;
-  if (newList && listSection.parentNode) {
-    listSection.parentNode.replaceChild(newList, listSection);
-  }
-}
-
-function rsRenderSidebarOnly() {
-  const sidebar = document.querySelector('.rs-sidebar');
-  if (!sidebar) return;
-  sidebar.innerHTML = rsBuildCategorySidebar();
+  card.outerHTML = rsBuildListCard();
 }
 
 /* ========================================
-   弹窗：批量修改分类
+   内联：批量修改分类（与采集设置一致）
    ======================================== */
-function openBatchModifyModal() {
-  if (!RS_SELECTED_QUESTION_IDS.length) return;
-
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay active';
-  overlay.id = 'rsBatchModal';
-  overlay.onclick = function(e) { if (e.target === overlay) closeBatchModal(); };
-  overlay.innerHTML = `
-    <div class="modal rs-batch-modal" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <h2 class="modal-title">批量修改分类</h2>
-        <button class="modal-close" onclick="closeBatchModal()">${window.getLucideIcon ? window.getLucideIcon('x') : ''}</button>
-      </div>
-      <div class="modal-body">
-        <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:12px">
-          已选 <strong style="color:var(--color-primary)">${RS_SELECTED_QUESTION_IDS.length}</strong> 个问题，请选择要设置的分类：
-        </p>
-        <div class="rs-checkbox-group" id="rsBatchCatList">
-          ${RS_CATEGORIES.map(c => `
-            <label class="rs-checkbox-item">
-              <input type="checkbox" value="${c.id}">
-              <span>${c.name}</span>
-            </label>
-          `).join('') || '<span class="rs-empty-text">暂无分类</span>'}
-        </div>
-        <div class="rs-modal-footer">
-          <button class="btn btn-ghost" onclick="closeBatchModal()">取消</button>
-          <button class="btn btn-primary" onclick="rsConfirmBatchModify()">确认修改</button>
-        </div>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(overlay);
+function rsToggleBatchCatArea() {
+  var batchArea = document.getElementById('rsBatchCatArea');
+  if (batchArea.style.display === 'none' || batchArea.style.display === '') {
+    batchArea.style.display = 'flex';
+    // 刷新分类下拉
+    var select = document.getElementById('rsBatchCatSelect');
+    if (select) {
+      select.innerHTML = '<option value="">选择分类</option>' +
+        RS_CATEGORIES.map(function(c) { return '<option value="' + c.id + '">' + c.name + '</option>'; }).join('');
+    }
+  } else {
+    batchArea.style.display = 'none';
+  }
 }
 
-function closeBatchModal() {
-  const el = document.getElementById('rsBatchModal');
-  if (el) el.remove();
-}
-
-function rsConfirmBatchModify() {
-  const checked = document.querySelectorAll('#rsBatchCatList input[type="checkbox"]:checked');
-  const newCatIds = Array.from(checked).map(cb => cb.value);
-
-  const count = RS_SELECTED_QUESTION_IDS.length;
-  RS_SELECTED_QUESTION_IDS.forEach(qid => {
-    const q = RS_QUESTIONS.find(x => x.id === qid);
-    if (q) q.categoryIds = [...newCatIds];
+function rsConfirmBatchCat() {
+  var select = document.getElementById('rsBatchCatSelect');
+  var catId = select ? select.value : '';
+  if (!catId) {
+    rsShowToast('请选择要设置的分类');
+    return;
+  }
+  var catName = '';
+  var cat = RS_CATEGORIES.find(function(c) { return c.id === catId; });
+  if (cat) catName = cat.name;
+  var count = RS_SELECTED_QUESTION_IDS.length;
+  RS_SELECTED_QUESTION_IDS.forEach(function(qid) {
+    var q = RS_QUESTIONS.find(function(x) { return x.id === qid; });
+    if (q) q.categoryId = catId || null;
   });
-
-  closeBatchModal();
+  document.getElementById('rsBatchCatArea').style.display = 'none';
   RS_SELECTED_QUESTION_IDS = [];
   navigateTo('tenant-report-settings');
-  setTimeout(() => rsShowToast(`已批量修改 ${count} 个问题的分类`), 50);
+  setTimeout(function() { rsShowToast('已将 ' + count + ' 个问题的分类修改为「' + catName + '」'); }, 50);
+}
+
+function rsCancelBatchCat() {
+  document.getElementById('rsBatchCatArea').style.display = 'none';
 }
 
 /* ========================================
@@ -1250,7 +1094,7 @@ function closeImportModal() {
 
 function rsDownloadTemplate() {
   const csv = '\ufeff问题内容,分类,平台,设备端\n'
-    + '东莞含羹加湿器厂家哪家专业,含羹机厂家,百度文心,移动端\n'
+    + '东莞香薰加湿器厂家哪家专业,香薰机厂家,百度文心,移动端\n'
     + '露营灯哪个品牌好,露营灯供应商,DeepSeek,电脑端\n'
     + '户外风扇厂家批发价格,户外风扇厂家,通义千问,移动端\n';
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -1320,13 +1164,14 @@ function rsConfirmImport() {
 
   let maxId = RS_QUESTIONS.length ? Math.max(...RS_QUESTIONS.map(q => q.id)) : 0;
   RS_IMPORT_PREVIEW.forEach(r => {
-    /* 匹配分类名 -> categoryIds */
-    const catIds = r.category
-      ? r.category.split(/[,，]/).map(s => s.trim()).filter(Boolean).map(name => {
-          const cat = RS_CATEGORIES.find(c => c.name === name);
+    /* 匹配分类名 -> categoryId（单分类，取第一个匹配） */
+    var matchedCat = r.category
+      ? r.category.split(/[,，]/).map(function(s) { return s.trim(); }).filter(Boolean).reduce(function(found, name) {
+          if (found) return found;
+          var cat = RS_CATEGORIES.find(function(c) { return c.name === name; });
           return cat ? cat.id : null;
-        }).filter(Boolean)
-      : [];
+        }, null)
+      : null;
 
     RS_QUESTIONS.unshift({
       id: ++maxId,
@@ -1334,7 +1179,7 @@ function rsConfirmImport() {
       platform: r.platform || '百度文心',
       device: r.device || '移动端',
       source: '导入',
-      categoryIds: catIds
+      categoryId: matchedCat
     });
   });
 
@@ -1472,269 +1317,25 @@ function rsShowToast(msg) {
 }
 
 /* ========================================
-   弹窗：管理分类（保留原有）
+   报表背景设置交互
    ======================================== */
-function openCategoryModal() {
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay active';
-  overlay.id = 'rsCategoryModal';
-  overlay.onclick = function(e) { if (e.target === overlay) closeCategoryModal(); };
-  overlay.innerHTML = `
-    <div class="modal rs-category-modal" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <h2 class="modal-title">管理分类</h2>
-        <button class="modal-close" onclick="closeCategoryModal()">${window.getLucideIcon ? window.getLucideIcon('x') : ''}</button>
-      </div>
-      <div class="modal-body">
-        <div class="rs-category-add-row">
-          <input type="text" id="rsNewCategoryInput" placeholder="输入新分类名称" onkeyup="if(event.key==='Enter') rsAddCategory()">
-          <button class="btn btn-primary" onclick="rsAddCategory()">添加</button>
-        </div>
-        <div class="rs-category-list" id="rsCategoryModalList">
-          ${rsBuildCategoryListHtml()}
-        </div>
-        <div class="rs-modal-footer">
-          <button class="btn btn-ghost" onclick="closeCategoryModal()">关闭</button>
-        </div>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-}
-
-function closeCategoryModal() {
-  const el = document.getElementById('rsCategoryModal');
-  if (el) el.remove();
-}
-
-function rsBuildCategoryListHtml() {
-  if (!RS_CATEGORIES.length) return '<div class="rs-empty-text">暂无分类</div>';
-  return RS_CATEGORIES.map(c => `
-    <div class="rs-category-list-item">
-      <span>${c.name}</span>
-      <span class="rs-category-delete" onclick="rsDeleteCategory('${c.id}')">删除</span>
-    </div>
-  `).join('');
-}
-
-function rsAddCategory() {
-  const input = document.getElementById('rsNewCategoryInput');
-  const name = (input.value || '').trim();
-  if (!name) return;
-  const maxId = RS_CATEGORIES.length ? Math.max(...RS_CATEGORIES.map(c => parseInt(c.id.replace('c', '')) || 0)) : 0;
-  RS_CATEGORIES.push({ id: 'c' + (maxId + 1), name });
-  input.value = '';
-  const list = document.getElementById('rsCategoryModalList');
-  if (list) list.innerHTML = rsBuildCategoryListHtml();
-  const container = document.getElementById('rsCategoryList');
-  if (container) container.innerHTML = rsBuildCategoryCheckboxes();
-  rsRenderSidebarOnly();
-}
-
-function rsDeleteCategory(id) {
-  if (!confirm('确定删除该分类？')) return;
-  RS_CATEGORIES = RS_CATEGORIES.filter(c => c.id !== id);
-  RS_SELECTED_CATEGORIES = RS_SELECTED_CATEGORIES.filter(x => x !== id);
-  /* 从问题中移除该分类 */
-  RS_QUESTIONS.forEach(q => {
-    if (q.categoryIds) q.categoryIds = q.categoryIds.filter(x => x !== id);
-  });
-  const list = document.getElementById('rsCategoryModalList');
-  if (list) list.innerHTML = rsBuildCategoryListHtml();
-  const container = document.getElementById('rsCategoryList');
-  if (container) container.innerHTML = rsBuildCategoryCheckboxes();
-  rsRenderSidebarOnly();
-}
-
-/* ========================================
-   弹窗：拓词工具（保留原有）
-   ======================================== */
-function openWordToolModal() {
-  const industries = ['金融', '教育', '医疗健康', '企业服务', '互联网', '电信通信', '汽车', '电商零售', '娱乐', '游戏', '旅行出行', '房地产', '制造业与工业', '公共事业'];
-  const combineOptions = [
-    'C+D 核心词+通义词',
-    'A+C+D 前缀1+核心词+通义词',
-    'B+C+D 前缀2+核心词+通义词',
-    'C+(D*E) 核心词+(通义词*推荐词)',
-    'C+(D*F) 核心词+(通义词*疑问词)',
-    '(A*B)+C+D (前缀1*前缀2)+核心词+通义词',
-    'A+C+(D*E) 前缀1+核心词+(通义词*推荐词)',
-    'B+C+(D*E) 前缀2+核心词+(通义词*推荐词)'
-  ];
-
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay active';
-  overlay.id = 'rsWordToolModal';
-  overlay.onclick = function(e) { if (e.target === overlay) closeWordToolModal(); };
-  overlay.innerHTML = `
-    <div class="modal rs-wordtool-modal" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <h2 class="modal-title">拓词工具</h2>
-        <button class="modal-close" onclick="closeWordToolModal()">${window.getLucideIcon ? window.getLucideIcon('x') : ''}</button>
-      </div>
-      <div class="modal-body rs-wordtool-body">
-        <div style="margin-bottom:6px">
-          <span style="color:var(--color-primary);font-size:12px;font-weight:500">+ 行业组合模板</span>
-          <span style="font-size:12px;color:var(--color-text-tertiary)">（点击自动填充示例数据）</span>
-        </div>
-        <div class="rs-industry-tags" id="rsIndustryTags">
-          ${industries.map((ind, i) => `<span class="rs-industry-tag ${i === 0 ? 'active' : ''}" onclick="rsSelectIndustry(this)">${ind}</span>`).join('')}
-        </div>
-        <div class="rs-word-columns">
-          <div class="rs-word-col">
-            <div class="rs-word-col-header"><span class="rs-word-col-letter">A</span><span>前缀1</span></div>
-            <textarea id="rsWordA" placeholder="市面上&#10;行业内&#10;市场&#10;目前&#10;国内&#10;本地&#10;线上&#10;推荐几家&#10;服务推荐几家"></textarea>
-          </div>
-          <div class="rs-word-col">
-            <div class="rs-word-col-header"><span class="rs-word-col-letter">B</span><span>前缀2</span></div>
-            <textarea id="rsWordB" placeholder="口碑好的&#10;比较靠谱的&#10;靠谱的&#10;有实力的&#10;专业的&#10;热门的&#10;值得推荐的&#10;真实的"></textarea>
-          </div>
-          <div class="rs-word-col">
-            <div class="rs-word-col-header"><span class="rs-word-col-letter">C</span><span>核心关键词</span></div>
-            <textarea id="rsWordC" placeholder="含羹机&#10;露营灯&#10;户外风扇&#10;加湿器"></textarea>
-          </div>
-          <div class="rs-word-col">
-            <div class="rs-word-col-header"><span class="rs-word-col-letter">D</span><span>通义词</span></div>
-            <textarea id="rsWordD" placeholder="平台&#10;公司&#10;机构&#10;银行"></textarea>
-          </div>
-          <div class="rs-word-col">
-            <div class="rs-word-col-header"><span class="rs-word-col-letter">E</span><span>推荐词</span></div>
-            <textarea id="rsWordE" placeholder="推荐&#10;排行&#10;排行榜&#10;哪家强&#10;排名榜&#10;推荐榜单&#10;推荐排行榜&#10;口碑推荐"></textarea>
-          </div>
-          <div class="rs-word-col">
-            <div class="rs-word-col-header"><span class="rs-word-col-letter">F</span><span>疑问词</span></div>
-            <textarea id="rsWordF" placeholder="哪家好&#10;哪家强&#10;排名推荐&#10;哪个好&#10;哪家专业&#10;怎么选&#10;有哪些&#10;找哪家&#10;选哪家"></textarea>
-          </div>
-        </div>
-        <div class="rs-combine-group">
-          <div class="rs-combine-title">组合方式 <span class="hint">（可多选）</span></div>
-          <div class="rs-combine-options">
-            <label class="rs-checkbox-item"><input type="checkbox" onchange="rsToggleAllCombine(this)"><span>全选</span></label>
-            ${combineOptions.map((opt, i) => `<label class="rs-checkbox-item"><input type="checkbox" class="rs-combine-cb" value="${i}"><span>${opt}</span></label>`).join('')}
-          </div>
-        </div>
-        <div class="rs-generate-btn-row">
-          <button class="btn btn-primary" onclick="rsGenerateWords()">生成</button>
-        </div>
-        <div class="rs-result-header">
-          <span>已生成 <strong id="rsResultCount" style="color:var(--color-primary)">0</strong> 个</span>
-          <div>
-            <label class="rs-checkbox-item" style="margin-right:12px"><input type="checkbox" onchange="rsToggleAllResults(this)"><span>全选</span></label>
-            <label class="rs-checkbox-item"><input type="checkbox" onchange="rsInverseResults()"><span>反选</span></label>
-          </div>
-        </div>
-        <div class="rs-result-table-wrap">
-          <table class="rs-result-table">
-            <thead>
-              <tr>
-                <th style="width:40px"><input type="checkbox" onchange="rsToggleAllResults(this)"></th>
-                <th style="width:50px">序号</th>
-                <th>问题</th>
-              </tr>
-            </thead>
-            <tbody id="rsResultTableBody">
-              <tr><td colspan="3" style="text-align:center;color:var(--color-text-tertiary)">点击"生成"后显示结果</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="rs-result-footer">
-          <span style="font-size:13px">已选 <strong id="rsSelectedCount" style="color:var(--color-primary)">0</strong> 个</span>
-          <button class="btn btn-primary" onclick="rsImportWords()">导入到批量添加</button>
-        </div>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(overlay);
-}
-
-function closeWordToolModal() {
-  const el = document.getElementById('rsWordToolModal');
-  if (el) el.remove();
-}
-
-function rsSelectIndustry(el) {
-  document.querySelectorAll('#rsIndustryTags .rs-industry-tag').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-}
-
-function rsToggleAllCombine(cb) {
-  document.querySelectorAll('.rs-combine-cb').forEach(c => c.checked = cb.checked);
-}
-
-function rsGenerateWords() {
-  const getLines = id => (document.getElementById(id).value || '').split(/\n/).map(s => s.trim()).filter(Boolean);
-  const A = getLines('rsWordA');
-  const B = getLines('rsWordB');
-  const C = getLines('rsWordC');
-  const D = getLines('rsWordD');
-  const E = getLines('rsWordE');
-  const F = getLines('rsWordF');
-  const cbs = document.querySelectorAll('.rs-combine-cb:checked');
-  if (!C.length || !D.length) { alert('请至少填写核心关键词和通义词'); return; }
-  if (!cbs.length) { alert('请选择组合方式'); return; }
-  const results = [];
-  const add = (arr) => arr.forEach(x => { if (x) results.push(x); });
-  cbs.forEach(cb => {
-    const idx = parseInt(cb.value);
-    switch (idx) {
-      case 0: add(C.flatMap(c => D.map(d => c + d))); break;
-      case 1: add(A.flatMap(a => C.flatMap(c => D.map(d => a + c + d)))); break;
-      case 2: add(B.flatMap(b => C.flatMap(c => D.map(d => b + c + d)))); break;
-      case 3: add(C.flatMap(c => D.flatMap(d => E.map(e => c + d + e)))); break;
-      case 4: add(C.flatMap(c => D.flatMap(d => F.map(f => c + d + f)))); break;
-      case 5: add(A.flatMap(a => B.flatMap(b => C.flatMap(c => D.map(d => a + b + c + d))))); break;
-      case 6: add(A.flatMap(a => C.flatMap(c => D.flatMap(d => E.map(e => a + c + d + e))))); break;
-      case 7: add(B.flatMap(b => C.flatMap(c => D.flatMap(d => E.map(e => b + c + d + e))))); break;
-    }
-  });
-  RS_GENERATED_WORDS = [...new Set(results)].slice(0, 300).map((text, i) => ({ id: i + 1, text, selected: false }));
-  rsRenderResults();
-}
-
-function rsRenderResults() {
-  const tbody = document.getElementById('rsResultTableBody');
-  const countEl = document.getElementById('rsResultCount');
-  const selectedEl = document.getElementById('rsSelectedCount');
-  if (countEl) countEl.textContent = RS_GENERATED_WORDS.length;
-  if (selectedEl) selectedEl.textContent = RS_GENERATED_WORDS.filter(x => x.selected).length;
-  if (!tbody) return;
-  if (!RS_GENERATED_WORDS.length) {
-    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--color-text-tertiary)">无结果</td></tr>';
-    return;
+function rsOnBgModeChange(el) {
+  var pickers = document.getElementById('rsCustomColorPickers');
+  var preview = document.getElementById('rsBgPreview');
+  if (el.value === 'custom') {
+    if (pickers) { pickers.style.display = 'flex'; }
+    rsUpdateGradientPreview();
+  } else {
+    if (pickers) { pickers.style.display = 'none'; }
+    if (preview) { preview.style.background = '#dae0f0'; }
   }
-  tbody.innerHTML = RS_GENERATED_WORDS.map((w, i) => `
-    <tr>
-      <td><input type="checkbox" ${w.selected ? 'checked' : ''} onchange="rsToggleResult(${w.id})"></td>
-      <td>${i + 1}</td>
-      <td>${w.text}</td>
-    </tr>
-  `).join('');
 }
 
-function rsToggleResult(id) {
-  const w = RS_GENERATED_WORDS.find(x => x.id === id);
-  if (w) w.selected = !w.selected;
-  rsRenderResults();
-}
-
-function rsToggleAllResults(cb) {
-  RS_GENERATED_WORDS.forEach(w => w.selected = cb.checked);
-  rsRenderResults();
-}
-
-function rsInverseResults() {
-  RS_GENERATED_WORDS.forEach(w => w.selected = !w.selected);
-  rsRenderResults();
-}
-
-function rsImportWords() {
-  const selected = RS_GENERATED_WORDS.filter(w => w.selected);
-  if (!selected.length) { alert('请选择要导入的问题'); return; }
-  const input = document.getElementById('rsQuestionInput');
-  if (input) {
-    const existing = input.value.trim();
-    input.value = existing ? existing + '\n' + selected.map(w => w.text).join('\n') : selected.map(w => w.text).join('\n');
+function rsUpdateGradientPreview() {
+  var start = document.getElementById('rsGradientStart');
+  var end = document.getElementById('rsGradientEnd');
+  var preview = document.getElementById('rsBgPreview');
+  if (start && end && preview) {
+    preview.style.background = 'linear-gradient(to right, ' + start.value + ', ' + end.value + ')';
   }
-  closeWordToolModal();
-  setTimeout(() => rsShowToast(`已导入 ${selected.length} 个问题到批量添加框`), 50);
 }
