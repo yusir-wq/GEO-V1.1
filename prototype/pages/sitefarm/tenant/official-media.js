@@ -383,43 +383,50 @@ const OM_MEDIA_LIST = [
     id: '1192052178936922127', name: '中国经济新闻网-科技', mediaType: '网络媒体',
     channelType: 'IT科技', portal: '其他门户', region: '全国', linkType: '不可带网址',
     collectionStatus: '不包网页收录', weekend: '可发', weight: 4, specialIndustry: '-',
-    loadTime: '18:00', note: '收录好，不可带联系方式，偏...', price: 120.00, status: '可用'
+    loadTime: '18:00', note: '收录好，不可带联系方式，偏...', status: '可用',
+    prices: [{ type: '主售价', amount: 60 }]
   },
   {
     id: '119091140954769679', name: '壹生网（GEO排名方案）', mediaType: '网络媒体',
     channelType: '生活消费', portal: '其他门户', region: '全国', linkType: '不可带网址',
     collectionStatus: '不包网页收录', weekend: '可发', weight: 4, specialIndustry: '-',
-    loadTime: '20:00', note: '审核松 出稿快，GEO排名稿件', price: 5.00, status: '可用'
+    loadTime: '20:00', note: '审核松 出稿快，GEO排名稿件', status: '可用',
+    prices: [{ type: '头条价格', amount: 23 }, { type: '普条价格', amount: 20 }]
   },
   {
     id: '1190353082236141583', name: '八方资源网(GEO排名方案)', mediaType: '网络媒体',
     channelType: '新闻资讯', portal: '其他门户', region: '全国', linkType: '不可带网址',
     collectionStatus: '不包网页收录', weekend: '可发', weight: 3, specialIndustry: '-',
-    loadTime: '20:00', note: '可发geo排名稿件，广告法禁...', price: 5.00, status: '可用'
+    loadTime: '20:00', note: '可发geo排名稿件，广告法禁...', status: '可用',
+    prices: [{ type: '直发价格', amount: 20 }, { type: '任务价格', amount: 20 }, { type: '转发价格', amount: 25 }]
   },
   {
     id: '1189477108646117391', name: '中原区人民政府网（GEO方案）', mediaType: '网络媒体',
     channelType: '新闻资讯', portal: '其他门户', region: '河南', linkType: '不可带网址',
     collectionStatus: '不包网页收录', weekend: '可发', weight: 1, specialIndustry: '-',
-    loadTime: '20:00', note: '可发GEO稿件，政府网站', price: 55.00, status: '可用'
+    loadTime: '20:00', note: '可发GEO稿件，政府网站', status: '可用',
+    prices: [{ type: '主售价', amount: 55 }]
   },
   {
     id: '1187198398942015503', name: '养拉网', mediaType: '网络媒体',
     channelType: '健康医疗', portal: '其他门户', region: '全国', linkType: '可带网址',
     collectionStatus: '不包网页收录', weekend: '可发', weight: 0, specialIndustry: '健康,医疗',
-    loadTime: '22:00', note: '医疗、医美专业发布平台，AI...', price: 98.00, status: '可用'
+    loadTime: '22:00', note: '医疗、医美专业发布平台，AI...', status: '可用',
+    prices: [{ type: '主售价', amount: 98 }]
   },
   {
     id: '1188532866486720767', name: '红黑网（广告排名方案）', mediaType: '网络媒体',
     channelType: '新闻资讯', portal: '其他门户', region: '全国', linkType: '不可带网址',
     collectionStatus: '不包网页收录', weekend: '不可发', weight: 1, specialIndustry: '-',
-    loadTime: '18:00', note: '限图3张，审核松，可发GEO排...', price: 35.00, status: '可用'
+    loadTime: '18:00', note: '限图3张，审核松，可发GEO排...', status: '可用',
+    prices: [{ type: '主售价', amount: 35 }]
   },
   {
     id: '1188532866486720768', name: '新华社客户端首发（限指数授权）', mediaType: '网络媒体',
     channelType: '新闻资讯', portal: '新华网', region: '全国', linkType: '不可带网址',
     collectionStatus: '不包网页收录', weekend: '不可发', weight: 1, specialIndustry: '-',
-    loadTime: '18:00', note: '秒出一手资源 改稿不通知', price: 1250.00, status: '可用'
+    loadTime: '18:00', note: '秒出一手资源 改稿不通知', status: '可用',
+    prices: [{ type: '主售价', amount: 1250 }]
   }
 ];
 
@@ -473,6 +480,7 @@ let omCurrentTab = 'media-list';
    已选资源状态
    ======================================== */
 let omSelectedIds = new Set();
+let omSelectedPrices = {}; // 存储每个资源选中的价格类型 { id: { type, amount } }
 
 /* ========================================
    主渲染函数
@@ -595,10 +603,20 @@ function renderOmMediaList() {
           </tr>
         </thead>
         <tbody>
-          ${OM_MEDIA_LIST.map(item => `
+          ${OM_MEDIA_LIST.map(item => {
+            const hasMultiplePrices = item.prices.length > 1;
+            const priceHtml = hasMultiplePrices
+              ? item.prices.map((p, idx) => `
+                <div style="display:flex;align-items:center;gap:4px;margin-bottom:${idx < item.prices.length - 1 ? '4px' : '0'};">
+                  <input type="radio" name="price-${item.id}" class="om-price-radio" data-id="${item.id}" data-price-type="${p.type}" data-price="${p.amount}" ${idx === 0 ? 'checked' : ''} onchange="omSelectPrice(this)" />
+                  <span style="white-space:nowrap;">${p.type}：¥${p.amount}元</span>
+                </div>
+              `).join('')
+              : `<span style="white-space:nowrap;">${item.prices[0].type}：¥${item.prices[0].amount}元</span>`;
+            return `
             <tr>
-              <td><input type="checkbox" class="om-checkbox om-row-cb" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" ${omSelectedIds.has(item.id) ? 'checked' : ''} onchange="omToggleRow(this)" /></td>
-              <td><span class="om-star" onclick="this.classList.toggle('active')">☆</span></td>
+              <td><input type="checkbox" class="om-checkbox om-row-cb" data-id="${item.id}" data-name="${item.name}" data-price="${item.prices[0].amount}" ${omSelectedIds.has(item.id) ? 'checked' : ''} onchange="omToggleRow(this)" /></td>
+              <td><span class="om-star" onclick="omToggleFavorite(this, '${item.id}')">☆</span></td>
               <td>
                 <div class="om-resource-name">${item.name}</div>
                 <div class="om-resource-id">ID: ${item.id}</div>
@@ -614,14 +632,14 @@ function renderOmMediaList() {
               <td>${item.specialIndustry}</td>
               <td>${item.loadTime}</td>
               <td class="om-note-cell" title="${item.note}">${item.note}</td>
-              <td style="white-space:nowrap;">¥${item.price.toFixed(2)}元</td>
+              <td style="white-space:nowrap;">${priceHtml}</td>
               <td style="white-space:nowrap;"><span class="om-badge om-badge-success">${item.status}</span></td>
               <td style="white-space:nowrap;">
-                <button class="om-btn om-btn-primary" onclick="openOmSubmitModal()">投稿</button>
+                <button class="om-btn om-btn-primary" onclick="openOmSubmitModal('${item.id}')">投稿</button>
                 <button class="om-btn om-btn-ghost" style="margin-left:4px;">收藏</button>
               </td>
             </tr>
-          `).join('')}
+          `}).join('')}
         </tbody>
       </table>
     </div>
@@ -853,24 +871,99 @@ function renderOmFavorites() {
 /* ========================================
    官媒投稿弹窗
    ======================================== */
-function openOmSubmitModal() {
+function openOmSubmitModal(singleResourceId) {
   // 关闭已有弹窗
   closeOmSubmitModal();
 
-  // 获取已选资源信息
-  const selectedResources = Array.from(omSelectedIds).map(id => {
-    const item = OM_MEDIA_LIST.find(m => m.id === id);
-    return item ? { name: item.name, price: item.price } : null;
-  }).filter(Boolean);
+  let selectedResources = [];
+  let isSingleResource = false;
 
-  const resourceSummary = selectedResources.map(r => `${r.name}（${r.price.toFixed(2)}）`).join('、');
-  const resourceTotal = selectedResources.reduce((sum, r) => sum + r.price, 0);
+  if (singleResourceId) {
+    // 单个资源投稿（点击"投稿"按钮）
+    isSingleResource = true;
+    const item = OM_MEDIA_LIST.find(m => m.id === singleResourceId);
+    if (item) {
+      selectedResources = [{
+        id: item.id,
+        name: item.name,
+        prices: item.prices
+      }];
+    }
+  } else {
+    // 快速投稿（底部操作栏）
+    selectedResources = Array.from(omSelectedIds).map(id => {
+      const item = OM_MEDIA_LIST.find(m => m.id === id);
+      if (!item) return null;
+      const selectedPrice = omSelectedPrices[id] || item.prices[0];
+      return {
+        id: item.id,
+        name: item.name,
+        selectedPrice: selectedPrice
+      };
+    }).filter(Boolean);
+  }
 
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay active';
   overlay.id = 'om-submit-modal';
-  overlay.innerHTML = `
-    <div class="om-modal-content">
+  
+  let bodyHtml = '';
+  
+  if (isSingleResource && selectedResources.length > 0) {
+    // 单个资源投稿：显示全部价格选项
+    const resource = selectedResources[0];
+    const resourceSummary = `${resource.name}`;
+    
+    bodyHtml = `
+      <div class="om-modal-header">
+        <div>
+          <div class="om-modal-title">官媒投稿</div>
+          <div class="om-modal-subtitle">${resourceSummary}</div>
+        </div>
+        <button class="om-modal-close" onclick="closeOmSubmitModal()">✕</button>
+      </div>
+      <div class="om-modal-body">
+        <div style="margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <span style="font-size:13px;font-weight:500;white-space:nowrap;">选择价格类型：</span>
+          ${resource.prices.map((p, idx) => `
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <input type="radio" name="modal-price" value="${p.type}" data-amount="${p.amount}" ${idx === 0 ? 'checked' : ''} onchange="updateOmModalTotal()" />
+              <span>${p.type}</span>
+              <span style="color:#cf1322;font-weight:600;">¥${p.amount}元</span>
+            </label>
+          `).join('')}
+        </div>
+        <div class="om-modal-search">
+          <input type="text" placeholder="搜索文章标题、关键词、客户" />
+          <button class="om-btn om-btn-primary" style="padding:8px 20px;">查询</button>
+        </div>
+        <div class="om-article-list">
+          ${OM_ARTICLES.map((article, i) => `
+            <div class="om-article-item">
+              <input type="checkbox" ${article.checked ? 'checked' : ''} onchange="updateOmModalTotal()" />
+              <div class="om-article-info">
+                <div class="om-article-title">${article.title}</div>
+                <div class="om-article-client">${article.client}</div>
+              </div>
+              <div class="om-article-date">${article.date}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="om-modal-footer">
+        <div class="om-total-cost">费用合计：<strong id="om-total-amount">0.00</strong></div>
+        <div class="om-modal-actions">
+          <button class="btn-cancel" onclick="closeOmSubmitModal()">取消</button>
+          <button class="btn-confirm" onclick="confirmOmSubmit()">确认投稿</button>
+        </div>
+      </div>
+    `;
+  } else {
+    // 快速投稿：显示所有已选资源的名称和价格
+    const resourceSummary = selectedResources.map(r => `${r.name}（${r.selectedPrice.type}：¥${r.selectedPrice.amount}元）`).join('、');
+    const resourceTotal = selectedResources.reduce((sum, r) => sum + r.selectedPrice.amount, 0);
+    
+    bodyHtml = `
       <div class="om-modal-header">
         <div>
           <div class="om-modal-title">快速投稿</div>
@@ -903,9 +996,31 @@ function openOmSubmitModal() {
           <button class="btn-confirm" onclick="confirmOmSubmit()">确认投稿</button>
         </div>
       </div>
-    </div>
-  `;
+    `;
+  }
+  
+  overlay.innerHTML = `<div class="om-modal-content">${bodyHtml}</div>`;
   document.body.appendChild(overlay);
+  
+  // 初始化总计
+  if (isSingleResource) {
+    updateOmModalTotal();
+  }
+}
+
+function updateOmModalTotal() {
+  const priceRadio = document.querySelector('#om-submit-modal input[name="modal-price"]:checked');
+  const checkboxes = document.querySelectorAll('#om-submit-modal .om-article-item input[type="checkbox"]');
+  
+  if (!priceRadio) return;
+  
+  const price = parseFloat(priceRadio.getAttribute('data-amount'));
+  let count = 0;
+  checkboxes.forEach(cb => { if (cb.checked) count++; });
+  
+  const total = (price * count).toFixed(2);
+  const el = document.getElementById('om-total-amount');
+  if (el) el.textContent = total;
 }
 
 function closeOmSubmitModal() {
@@ -945,8 +1060,13 @@ document.addEventListener('click', function(e) {
 function omCalcTotal() {
   let total = 0;
   omSelectedIds.forEach(id => {
-    const item = OM_MEDIA_LIST.find(m => m.id === id);
-    if (item) total += item.price;
+    const selectedPrice = omSelectedPrices[id];
+    if (selectedPrice) {
+      total += selectedPrice.amount;
+    } else {
+      const item = OM_MEDIA_LIST.find(m => m.id === id);
+      if (item) total += item.prices[0].amount;
+    }
   });
   return total.toFixed(2);
 }
@@ -967,7 +1087,8 @@ function omUpdateActionBar() {
     tagsContainer.innerHTML = Array.from(omSelectedIds).map(id => {
       const item = OM_MEDIA_LIST.find(m => m.id === id);
       if (!item) return '';
-      return `<span class="om-selected-tag">${item.name} <span class="tag-price">${item.price.toFixed(2)}</span> <span class="tag-remove" onclick="omRemoveSelected('${id}')">✕</span></span>`;
+      const selectedPrice = omSelectedPrices[id] || item.prices[0];
+      return `<span class="om-selected-tag">${item.name} <span class="tag-price">${selectedPrice.type}：¥${selectedPrice.amount}元</span> <span class="tag-remove" onclick="omRemoveSelected('${id}')">✕</span></span>`;
     }).join('');
   }
 
@@ -1001,12 +1122,73 @@ function omToggleAll(el) {
 
 function omToggleRow(el) {
   const id = el.getAttribute('data-id');
+  const item = OM_MEDIA_LIST.find(m => m.id === id);
+  
   if (el.checked) {
+    // 检查是否是多价格资源
+    if (item && item.prices.length > 1) {
+      // 检查是否已选择价格
+      const selectedRadio = document.querySelector(`input[name="price-${id}"]:checked`);
+      if (!selectedRadio) {
+        el.checked = false;
+        showToast('请选择右侧对应的资源价格', 'warning');
+        return;
+      }
+      omSelectedPrices[id] = {
+        type: selectedRadio.getAttribute('data-price-type'),
+        amount: parseFloat(selectedRadio.getAttribute('data-price'))
+      };
+    } else if (item) {
+      // 单价格资源，使用默认价格
+      omSelectedPrices[id] = {
+        type: item.prices[0].type,
+        amount: item.prices[0].amount
+      };
+    }
     omSelectedIds.add(id);
   } else {
     omSelectedIds.delete(id);
+    delete omSelectedPrices[id];
   }
   omUpdateActionBar();
+}
+
+function omSelectPrice(el) {
+  const id = el.getAttribute('data-id');
+  const priceType = el.getAttribute('data-price-type');
+  const price = parseFloat(el.getAttribute('data-price'));
+  
+  // 更新选中的价格
+  omSelectedPrices[id] = { type: priceType, amount: price };
+  
+  // 如果该行已勾选，更新操作栏
+  if (omSelectedIds.has(id)) {
+    omUpdateActionBar();
+  }
+}
+
+function omToggleFavorite(el, id) {
+  const item = OM_MEDIA_LIST.find(m => m.id === id);
+  
+  // 检查是否是多价格资源
+  if (item && item.prices.length > 1) {
+    // 检查是否已选择价格
+    const selectedRadio = document.querySelector(`input[name="price-${id}"]:checked`);
+    if (!selectedRadio) {
+      showToast('请选择右侧对应的资源价格', 'warning');
+      return;
+    }
+  }
+  
+  // 切换收藏状态
+  el.classList.toggle('active');
+  if (el.classList.contains('active')) {
+    el.textContent = '★';
+    showToast('已收藏', 'success');
+  } else {
+    el.textContent = '☆';
+    showToast('已取消收藏', 'success');
+  }
 }
 
 function omRemoveSelected(id) {
